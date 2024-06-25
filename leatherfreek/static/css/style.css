@@ -11,6 +11,14 @@ body {
   padding: 90px 0;
 }
 
+.layout_padding-center {
+  padding: 90px 0;
+  text-align: center;
+  padding-right: 90px;
+  padding-left: 90px;
+
+}
+
 .layout_padding2 {
   padding: 45px 0;
 }
@@ -326,7 +334,8 @@ a:focus {
 }
 
 .furniture_section .box {
-  margin-top: 45px;
+  margin-top: auto;
+  margin-left: auto;
   background-color: #f7fafa;
   padding: 25px;
   border-radius: 5px;

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product
+from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description
 
 @admin.register(Home_Product)
 class Home_ProductAdmin(admin.ModelAdmin):
@@ -46,4 +46,12 @@ class Design_CatagoryAdmin(admin.ModelAdmin):
     list_filter = ('design_catagory_name', 'design_catagory_code')
     ordering = ('design_catagory_name',)
     search_fields = ('design_catagory_name', 'design_catagory_code')
+
+
+@admin.register(Volume_Description)
+class Volume_DescriptionAdmin(admin.ModelAdmin):
+    list_display = ('volume_description_id', 'width' , 'hight' , 'depth' , 'vollume')
+    list_filter = ('width' , 'hight' , 'depth' , 'vollume')
+    ordering = ('width' , 'hight' , 'depth' , 'vollume')
+    search_fields = ('width' , 'hight' , 'depth' , 'vollume')
 

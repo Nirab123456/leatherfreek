@@ -2,7 +2,18 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 # Create your models here.
+class Volume_Description(models.Model):
+    volume_description_id = models.AutoField(primary_key=True)
+    width = models.DecimalField(max_digits=10, decimal_places=2)
+    hight = models.DecimalField(max_digits=10, decimal_places=2)
+    depth = models.DecimalField(max_digits=10, decimal_places=2)
+    vollume = models.DecimalField(max_digits=10, decimal_places=2)
 
+    #return the volume of the product
+    def __str__(self):
+        str_vol = f"{self.vollume}"
+        return str_vol
+        
 class Display_Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=100)
@@ -13,9 +24,14 @@ class Display_Product(models.Model):
     product_catagory = models.ManyToManyField('Catagory')
     product_design_catagory = models.ManyToManyField('Design_Catagory')
     product_added_date = models.DateTimeField(auto_now_add=True)
+    volume_description = models.ForeignKey(Volume_Description, on_delete=models.CASCADE)
+    weight_description = models.DecimalField(max_digits=10, decimal_places=2)
+    text_description = models.TextField()
 
     def __str__(self):
         return self.product_name
+
+
 
 
 class Home_Product(models.Model):
@@ -63,3 +79,7 @@ class Design_Catagory(models.Model):
 
     def __str__(self):
         return self.design_catagory_name
+    
+
+
+

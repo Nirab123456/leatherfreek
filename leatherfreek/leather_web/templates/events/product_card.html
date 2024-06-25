@@ -1,0 +1,288 @@
+
+
+{% load static %}
+
+  {% block content %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="images/fevicon.png" type="image/gif" />
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Edgecut</title>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+
+  <!-- font awesome style -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+
+  <style>
+    .color-container {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .color-viewer {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: inline-block;
+        border: 1px solid #000;
+    }
+
+
+    #catagory-container .catagory-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+#catagory-container .catagory-item {
+    flex: 0 0 auto;
+    padding: 5px;
+
+}
+
+.catagory-item .catagory {
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.catagory-item .design_catagory {
+    background-color: #faf7f7;
+    color: #151414;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+
+
+
+
+    
+  
+</style>
+
+</head>
+
+<body>
+
+
+
+
+
+  <!-- furniture section -->
+
+  <section class="furniture_section layout_padding ">
+    <div class="container">
+      
+      <div class="row justify-content-center">
+
+
+        <div class="col-lg-6">
+          <div class="box">
+            <div class="img-box">
+              <img src="{{ product.images.first.image.url }}" alt="{{ product.images.first.image.url }}">
+            </div>
+            <div class="detail-box">
+              <h5>
+
+                {{ product.product_name }}
+
+              </h5>
+
+              <div class="price_box">
+
+                <h3>Color:</h3>
+                <div class="color-container" id="color-container">
+                    {% for color in product.product_color.all %}
+
+                        <div class="color-viewer" data-hex="{{ color.hex_code }}" title="{{ color.color_name }}"></div>
+                    {% endfor %}
+                </div>
+
+              </div>
+
+              <div class="price_box">
+                <h6 class="price_heading">
+                  <span>$</span>
+                  
+                  
+                  {{ product.product_price }}
+
+
+                </h6>
+                <a href="">
+                  Buy Now
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-lg-6">
+          <div class="box">
+
+            <div class="detail-box">
+              <h5>
+
+                {{ product.product_title }}
+
+              </h5>
+
+
+              <div class="price_box">
+                
+                <div class="catagory-container" id="catagory-container">
+
+                        <div class="catagory-viewer">
+                            <p>{{ product.text_description }}</p>
+                        </div>
+
+                </div>
+
+              </div>
+
+
+              <div class="price_box">
+
+                <h5>Category:</h5>
+                <div class="col-sm-6 row-sm-6" id="catagory-container">
+                  <div class="catagory-list">
+                      {% for catagory in product.product_catagory.all %}
+                          <div class="catagory-item">
+                              <p class="catagory">{{ catagory.catagory_name }}</p>
+                          </div>
+                      {% endfor %}
+                  </div>
+              </div>
+              
+
+              </div>
+              <div class="price_box">
+
+                <h5>DESIGN:</h5>
+                <div class="col-sm-6 row-sm-6" id="catagory-container">
+                  <div class="catagory-list">
+                    {% for product_design in product.product_design_catagory.all %}
+
+                    <div class="catagory-item">
+                      <p class="design_catagory">{{ product_design.design_catagory_name }}</p>
+                  </div>
+                    {% endfor %}
+
+                  </div>
+              </div>
+
+              
+
+              </div>
+
+              
+              <div class="table-responsive">
+                <table class="table table-bordered table-centered">
+                    <thead>
+                        <tr>
+                            <th>Weight</th>
+                            <th>Height</th>
+                            <th>Width</th>
+                            <th>Depth</th>
+                            <th>Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{ product.weight_description |default:"No weight description available" }}</td>
+                        <td>Example Height</td>
+                            <td>Example Width</td>
+                            <td>Example Depth</td>
+                            <td>Example Volume</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+            
+
+
+              <div class="price_box">
+                <h6 class="price_heading">
+                  <span>$</span>
+                  
+                  
+                  {{ product.product_price }}
+
+
+                </h6>
+                <a href="">
+                  Buy Now
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+      </div>
+    </div>
+  </section>
+
+  <!-- end furniture section -->
+
+
+
+
+  <!-- End Google Map -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const colorDivs = document.querySelectorAll('.color-viewer');
+        colorDivs.forEach(div => {
+            const hexCode = div.getAttribute('data-hex');
+            div.style.backgroundColor = hexCode;
+        });
+    });
+
+</script>
+
+
+</body>
+
+</html>
+  
+  {% endblock %}
