@@ -22,17 +22,13 @@ class Home_Product(models.Model):
     # Selecting the product from the display product
     product = models.ForeignKey(Display_Product, on_delete=models.CASCADE, unique=True)
 
+    #check if the product is already in the homeproduct
     def clean(self):
-        if Home_Product.objects.exists() and not self.pk:
-            raise ValidationError("There can only be one home product.")
-        super().clean()
-
-    def save(self, *args, **kwargs):
-        self.full_clean()  # This will call the clean method
-        super().save(*args, **kwargs)
-
+        if Home_Product.objects.filter(product=self.product).exists():
+            raise ValidationError("This product is already in the Home Product list")
+        
     def __str__(self):
-        return f'Home Product: {self.product.product_name}'
+        return self.product.product_name
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Display_Product, related_name='images', on_delete=models.CASCADE)
