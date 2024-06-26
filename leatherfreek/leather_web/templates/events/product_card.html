@@ -97,6 +97,7 @@
 
 <body>
 
+  {% include 'events/head_nav.html' %}
 
 
 
@@ -109,10 +110,10 @@
       <div class="row justify-content-center">
 
 
-        <div class="col-lg-6">
+        <div style="margin-bottom: 10px;" class="col-lg-6">
           <div class="box">
             <div class="img-box">
-              <img src="{{ product.images.first.image.url }}" alt="{{ product.images.first.image.url }}">
+              <img src="{{ product.product_image.first.image.url }}" alt="{{ product.product_image.first.image.url }}">
             </div>
             <div class="detail-box">
               <h5>
@@ -225,10 +226,10 @@
                     <tbody>
                       <tr>
                         <td>{{ product.weight_description |default:"No weight description available" }}</td>
-                        <td>Example Height</td>
-                            <td>Example Width</td>
-                            <td>Example Depth</td>
-                            <td>Example Volume</td>
+                        <td>{{ volume_description.hight }}</td>
+                            <td>{{ volume_description.width }}</td>
+                            <td>{{ volume_description.depth }}</td>
+                            <td>{{ volume_description.vollume }}</td>
                         </tr>
                         <!-- Add more rows as needed -->
                     </tbody>
@@ -238,17 +239,7 @@
 
 
               <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span>
-                  
-                  
-                  {{ product.product_price }}
 
-
-                </h6>
-                <a href="">
-                  Buy Now
-                </a>
               </div>
 
             </div>

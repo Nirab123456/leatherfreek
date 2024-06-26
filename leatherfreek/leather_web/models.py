@@ -27,6 +27,7 @@ class Display_Product(models.Model):
     volume_description = models.ForeignKey(Volume_Description, on_delete=models.CASCADE)
     weight_description = models.DecimalField(max_digits=10, decimal_places=2)
     text_description = models.TextField()
+    product_image = models.ManyToManyField('ProductImage')
 
     def __str__(self):
         return self.product_name
@@ -47,11 +48,11 @@ class Home_Product(models.Model):
         return self.product.product_name
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Display_Product, related_name='images', on_delete=models.CASCADE)
+    image_id = models.AutoField(primary_key=True)
     image = models.ImageField(upload_to='product_images/')
 
     def __str__(self):
-        return f"{self.product.product_name} Image"
+        return f"{self.image}"
 
 
 class Color(models.Model):
@@ -67,6 +68,7 @@ class Catagory(models.Model):
     catagory_id = models.AutoField(primary_key=True)
     catagory_name = models.CharField(max_length=100)
     catagory_code = models.CharField(max_length=10)
+    catagory_details = models.TextField()
 
     def __str__(self):
         return self.catagory_name
@@ -76,6 +78,7 @@ class Design_Catagory(models.Model):
     design_catagory_id = models.AutoField(primary_key=True)
     design_catagory_name = models.CharField(max_length=100)
     design_catagory_code = models.CharField(max_length=10)
+    design_catagory_details = models.TextField()
 
     def __str__(self):
         return self.design_catagory_name

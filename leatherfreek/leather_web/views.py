@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404
-from .models import Display_Product, Home_Product, ProductImage, Color, Catagory, Design_Catagory
+from .models import Display_Product, Home_Product, Color, Catagory, Design_Catagory
 
 # Create your views here.
 
@@ -17,8 +17,24 @@ def product_card(request, product_id):
     # Example of passing product to the template
     context = {
         'product': product,
+        'volume_description' : product.volume_description,
     }
     print(context)
     
     print(context)
     return render(request, 'events/product_card.html', context)
+
+def view_products(request, catagory_id):
+    # Retrieve the catagory object using the catagory_id
+    catagory = get_object_or_404(Catagory, pk=catagory_id)
+    
+    # Retrieve all products in the catagory
+    products = Display_Product.objects.filter(product_catagory=catagory)
+    
+    # Example of passing products to the template
+    context = {
+        'catagory': catagory,
+        'products': products,
+    }
+    
+    return render(request, 'events/view_products.html', context)
