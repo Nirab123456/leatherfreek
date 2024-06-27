@@ -1,6 +1,14 @@
 {% load static %}
 {% block content %}
+<style>
+  /* styles.css */
 
+.cart-icon {
+    width: 50px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+}
+
+</style>
 <!-- header section starts -->
 <header class="header_section long_section px-0">
   <nav class="navbar navbar-expand-lg custom_nav-container ">
@@ -37,11 +45,12 @@
           <span>Logout</span>
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
-        <form class="form-inline">
-          <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
-            <i class="fa fa-search" aria-hidden="true"></i>
+        <a href="#">
+          <button class="btn my-2 my-sm-0 nav_cart-btn" type="button">
+            <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
           </button>
-        </form>
+        </a>
+      
       </div>
       {% else %}
       <div class="quote_btn-container" id="login-content" style="display: none;">
@@ -49,11 +58,12 @@
           <span>Login</span>
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
-        <form class="form-inline">
-          <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
-            <i class="fa fa-search" aria-hidden="true"></i>
+        <a href="#">
+          <button class="btn my-2 my-sm-0 nav_cart-btn" type="button">
+            <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
           </button>
-        </form>
+        </a>
+
       </div>
 
       <div class="quote_btn-container" id="signup-content" style="display: none;">
@@ -61,11 +71,11 @@
           <span>Sign Up</span>
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
-        <form class="form-inline">
-          <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
-            <i class="fa fa-search" aria-hidden="true"></i>
+        <a href="#">
+          <button class="btn my-2 my-sm-0 nav_cart-btn" type="button">
+            <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
           </button>
-        </form>
+        </a>
       </div>
 
       <div class="quote_btn-container" id="signup_login-content" style="display: none;">
@@ -73,11 +83,11 @@
           <span>Login / Signup</span>
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
-        <form class="form-inline">
-          <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
-            <i class="fa fa-search" aria-hidden="true"></i>
+        <a href="#">
+          <button class="btn my-2 my-sm-0 nav_cart-btn" type="button">
+            <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
           </button>
-        </form>
+        </a>
       </div>
       {% endif %}
     </div>

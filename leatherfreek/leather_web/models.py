@@ -28,6 +28,7 @@ class Display_Product(models.Model):
     weight_description = models.DecimalField(max_digits=10, decimal_places=2)
     text_description = models.TextField()
     product_image = models.ManyToManyField('ProductImage')
+    Instagram_Post = models.ManyToManyField('Instagram_Post' , blank=True , null=True)
 
     def __str__(self):
         return self.product_name
@@ -82,6 +83,18 @@ class Design_Catagory(models.Model):
 
     def __str__(self):
         return self.design_catagory_name
+    
+
+
+class Instagram_Post(models.Model):
+    post_id = models.AutoField(primary_key=True)
+    post_image = models.ImageField(upload_to='instagram_images/')
+    post_link = models.URLField(max_length=200)
+    home_page_available = models.BooleanField(default=False)
+    post_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.post_id}"
     
 
 

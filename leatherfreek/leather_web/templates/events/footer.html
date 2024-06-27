@@ -1,5 +1,6 @@
 {% load static %}
   {% block content %}
+  {% load custom_tags %}
 
   <!-- info section -->
   <section class="info_section long_section">
@@ -9,19 +10,19 @@
         <a href="">
           <i class="fa fa-phone" aria-hidden="true"></i>
           <span>
-            Call : +01 123455678990
+            Call : +1 437 566 9332
           </span>
         </a>
         <a href="">
           <i class="fa fa-envelope" aria-hidden="true"></i>
           <span>
-            Email : demo@gmail.com
+            Email : info@leatherfreek.ca
           </span>
         </a>
         <a href="">
           <i class="fa fa-map-marker" aria-hidden="true"></i>
           <span>
-            Location
+            Toronto, Canada
           </span>
         </a>
       </div>
@@ -35,10 +36,10 @@
               </h4>
               <div class="info_links_menu">
                 <a class="" href="index.html">Home <span class="sr-only">(current)</span></a>
-                <a class="" href="about.html"> About</a>
-                <a class="" href="furniture.html">Furniture</a>
-                <a class="" href="blog.html">Blog</a>
-                <a class="" href="contact.html">Contact Us</a>
+                <a class="" href="about.html"> WALLET/PURSE</a>
+                <a class="" href="furniture.html">WEARABLES</a>
+                <a class="" href="blog.html">ACCESSORIES</a>
+                <a class="" href="contact.html">Contact & About Us</a>
               </div>
             </div>
           </div>
@@ -48,25 +49,19 @@
                 INSTAGRAM FEEDS
               </h5>
               <div class="post_box">
-                <div class="img-box">
-                  <img src="{% static 'images/f1.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'images/f2.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'images/f3.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'images/f4.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'images/f5.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'images/f6.png' %}" alt="">
-                </div>
-              </div>
+
+              {% get_home_instagram_posts as insta_post %}
+              {% for post in insta_post %}
+
+                <a class="img-box" href="{{ post.post_link }}">
+                  <img src="{{ post.post_image.url }}" alt="">
+                </a>
+
+              {% endfor %}
+            </div>
+
+
+              
             </div>
           </div>
           <div class="col-md-4">

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description
+from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post
 
 @admin.register(Home_Product)
 class Home_ProductAdmin(admin.ModelAdmin):
@@ -54,4 +54,12 @@ class Volume_DescriptionAdmin(admin.ModelAdmin):
     list_filter = ('width' , 'hight' , 'depth' , 'vollume')
     ordering = ('width' , 'hight' , 'depth' , 'vollume')
     search_fields = ('width' , 'hight' , 'depth' , 'vollume')
+
+
+@admin.register(Instagram_Post)
+class Instagram_PostAdmin(admin.ModelAdmin):
+    list_display = ('post_id', 'post_image')
+    list_filter = ('post_id', 'post_image')
+    ordering = ('post_id',)
+    search_fields = ('post_id', 'post_image')
 
