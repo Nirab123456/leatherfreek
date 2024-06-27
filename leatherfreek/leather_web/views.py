@@ -38,3 +38,16 @@ def view_products(request, catagory_id):
     }
     
     return render(request, 'events/view_products.html', context)
+
+
+def user_profile(request):
+    return render(request, 'events/user_profile.html')
+
+def user_signup(request):
+    return render(request, 'accounts/signup.html')
+
+def user_logout(request):
+    return render(request, 'accounts/logout.html')
+
+def user_login(request):
+    return render(request, 'accounts/login.html')
