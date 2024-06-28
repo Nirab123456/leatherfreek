@@ -97,5 +97,16 @@ class Instagram_Post(models.Model):
         return f"{self.post_id}"
     
 
+class contact_us(models.Model):
+    contact_id = models.AutoField(primary_key=True)
+    contact_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    contact_email = models.EmailField(max_length=100)
+    contact_message = models.TextField()
+
+    def __str__(self):
+        return self.contact_name
+    
+
 
 

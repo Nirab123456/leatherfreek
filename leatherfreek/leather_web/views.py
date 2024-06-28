@@ -54,3 +54,6 @@ def user_login(request):
 
 def shopping_cart(request):
     return render(request, 'events/shopping_cart.html')
+
+def about_contact(request):
+    return render(request, 'events/about_contact.html')
