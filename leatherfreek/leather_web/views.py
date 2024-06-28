@@ -51,3 +51,6 @@ def user_logout(request):
 
 def user_login(request):
     return render(request, 'accounts/login.html')
+
+def shopping_cart(request):
+    return render(request, 'events/shopping_cart.html')
