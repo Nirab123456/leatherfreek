@@ -151,3 +151,32 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.zohocloud.ca'
+EMAIL_PORT = 587  # Use 587 for TLS
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'security.auth@leatherfreek.ca'
+EMAIL_HOST_PASSWORD = 'RImajumder@123'
+
+DEFAULT_FROM_EMAIL = 'security.auth@leatherfreek.ca'
+SERVER_EMAIL = 'security.auth@leatherfreek.ca'
+
+
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH2_CLIENT_ID': '887556623145-5gnij0j9suo9558jcdt6do15ac0sao8b.apps.googleusercontent.com',
+        'OAUTH2_CLIENT_SECRET': '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',
+        'REDIRECT_URI': 'http://localhost:8000/accounts/google/login/callback/'
+    }
+}
