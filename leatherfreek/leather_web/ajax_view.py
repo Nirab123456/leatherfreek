@@ -18,3 +18,18 @@ def add_to_cart_ajax(request, product_id):
     else:
         shopping_cart.objects.create(user=request.user, product=product, quantity=1)
     return JsonResponse({'success': True , 'product': product.product_name})
+
+
+def increase_quantity_ajax(request, product_id):
+    product = get_object_or_404(Display_Product, product_id=product_id)
+    cart_item = shopping_cart.objects.filter(user=request.user, product=product).first()
+    cart_item.quantity += 1
+    cart_item.save()
+    return JsonResponse({'success': True, 'product': product.product_name})
+
+def decrease_quantity_ajax(request, product_id):
+    product = get_object_or_404(Display_Product, product_id=product_id)
+    cart_item = shopping_cart.objects.filter(user=request.user, product=product).first()
+    cart_item.quantity -= 1
+    cart_item.save()
+    return JsonResponse({'success': True, 'product': product.product_name})

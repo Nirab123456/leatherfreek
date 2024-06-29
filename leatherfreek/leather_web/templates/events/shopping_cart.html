@@ -156,7 +156,12 @@
     .checkout:hover {
       background-color: #494;
     }
+    .hidden {
+      display: none;
+    }
+
   </style>
+  
 </head>
 <body>
 
@@ -183,7 +188,8 @@
       </div>
       <div class="product-price">${{ item.product.product_price }}</div>
       <div class="product-quantity">
-        <input type="number" value="{{ item.quantity }}" min="1" data-product-id="{{ item.product.product_id }}" onchange="updateQuantity(this)">
+        <input type="number" value="{{ item.quantity }}" min="1" data-product-id="{{ item.product.product_id }}" onchange="updateQuantity_ajax({{ item.product.product_id }})">
+        <div class="hidden" data-previous-quantity-product-id="{{ item.product.product_id }}">{{ item.quantity }}</div>
       </div>
       <div class="product-removal">
         <button class="remove-product" data-product-id="{{ item.product.product_id }}" onclick="removeItem(this)">Remove</button>
@@ -235,8 +241,6 @@
       var shipping = (subtotal > 0 ? shippingRate : 0); // Shipping applies if subtotal > 0
       var total = subtotal + tax + shipping;
     
-      console.log(subtotal, tax, shipping, total); // Debugging
-    
       /* Update totals display */
       $('.totals-value').fadeOut(fadeTime, function() {
         $('#cart-subtotal').text('$' + subtotal.toFixed(2));
@@ -254,12 +258,78 @@
         $('.totals-value').fadeIn(fadeTime);
       });
     }
+
+    function increase_quantity_ajax(product_id){
+      const csrf = '{{ csrf_token }}';
+      fetch(`/increase_quantity_ajax/${product_id}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Quantity increased!');
+        } else {
+          alert('There was an error increasing the quantity.');
+        }
+      })
+    }
+
+    function decrease_quantity_ajax(product_id){
+      const csrf = '{{ csrf_token }}';
+      fetch(`/decrease_quantity_ajax/${product_id}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Quantity decreased!');
+        } else {
+          alert('There was an error decreasing the quantity.');
+        }
+      })
+    }
+
+    function updateQuantity_ajax(product_id) {
+      // current value of the input field
+      const quantity = document.querySelector(`input[data-product-id="${product_id}"]`).value;
+
+      console.log(`Quantity from input field: ${quantity}`);
+
+      // find the hidden div tag
+      const hiddenDiv = document.querySelector(`div[data-previous-quantity-product-id="${product_id}"]`);
+
+      // check if hiddenDiv is found
+      if (!hiddenDiv) {
+        console.error(`No <div> tag found with data-product-id="${product_id}"`);
+        return; // exit the function early
+      }
+
+      // quantity previously stored in the div tag
+      const previous_quantity = hiddenDiv.textContent.trim();
+      // make it a number
+      const previous_quantity_number = parseInt(previous_quantity);
+
+      console.log(`Previous quantity from <div> tag: ${previous_quantity_number}`);
+
+      if (quantity > previous_quantity_number) {
+        increase_quantity_ajax(product_id);
+      } else if (quantity < previous_quantity_number) {
+        decrease_quantity_ajax(product_id);
+      }
+    }
+
     recalculateCart();
-    
-    
   </script>
   
-  </body>
-  </html>
-  
-  {% endblock %}
+</body>
+</html>
+
+{% endblock %}
