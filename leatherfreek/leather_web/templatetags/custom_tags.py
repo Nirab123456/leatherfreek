@@ -39,5 +39,9 @@ def handle_contact_form(request):
     return False  # Return False if form submission failed or if request method is not POST
 
 
+@register.filter
+def multiply(value, arg):
+    return value * arg
+
 
             
