@@ -16,7 +16,7 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <title>Edgecut</title>
+  <title>LeatherFreek</title>
 
   <!-- bootstrap core css -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
@@ -178,7 +178,7 @@
     </div>
   
     {% for item in cart_items %}
-    <div class="product">
+    <div class="product" data-product-id="{{ item.product.product_id }}">
       <div class="product-image">
         <img src="{{ item.product.product_image.first.image.url }}" alt="Product Image">
       </div>
@@ -192,7 +192,7 @@
         <div class="hidden" data-previous-quantity-product-id="{{ item.product.product_id }}">{{ item.quantity }}</div>
       </div>
       <div class="product-removal">
-        <button class="remove-product" data-product-id="{{ item.product.product_id }}" onclick="removeItem(this)">Remove</button>
+        <button class="remove-product" data-product-id="{{ item.product.product_id }}" onclick="removeItem({{ item.product.product_id }})">Remove</button>
       </div>
       <div class="product-line-price">${{ item.product.product_price|multiply:item.quantity }}</div>
     </div>
@@ -259,42 +259,40 @@
       });
     }
 
-    function increase_quantity_ajax(product_id){
+    async function increase_quantity_ajax(product_id){
       const csrf = '{{ csrf_token }}';
-      fetch(`/increase_quantity_ajax/${product_id}/`, {
+      const response = await fetch(`/increase_quantity_ajax/${product_id}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrf,
         },
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Quantity increased!');
-        } else {
-          alert('There was an error increasing the quantity.');
-        }
-      })
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert('Quantity increased!');
+      } else {
+        alert('There was an error increasing the quantity.');
+      }
+      recalculateCart();
     }
 
-    function decrease_quantity_ajax(product_id){
+    async function decrease_quantity_ajax(product_id){
       const csrf = '{{ csrf_token }}';
-      fetch(`/decrease_quantity_ajax/${product_id}/`, {
+      const response = await fetch(`/decrease_quantity_ajax/${product_id}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrf,
         },
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Quantity decreased!');
-        } else {
-          alert('There was an error decreasing the quantity.');
-        }
-      })
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert('Quantity decreased!');
+      } else {
+        alert('There was an error decreasing the quantity.');
+      }
+      recalculateCart();
     }
 
     function updateQuantity_ajax(product_id) {
@@ -324,6 +322,44 @@
       } else if (quantity < previous_quantity_number) {
         decrease_quantity_ajax(product_id);
       }
+
+      // Update inline price immediately
+      update_inline_price(product_id);
+    }
+
+    /* Remove item from cart */
+    async function removeItem(product_id) {
+      const csrf = '{{ csrf_token }}';
+      const response = await fetch(`/remove_from_cart_ajax/${product_id}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf,
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        alert('Item removed from cart!');
+        // find the product element in the DOM
+        const productElement = document.querySelector(`.product[data-product-id="${product_id}"]`);
+        if (productElement) {
+          // remove the product element from the DOM
+          productElement.remove();
+          recalculateCart();
+        } else {
+          console.error(`No product element found with data-product-id="${product_id}"`);
+        }
+      } else {
+        alert('There was an error removing the item from the cart.');
+      }
+    }
+
+    function update_inline_price(product_id){
+      var quantity = document.querySelector(`input[data-product-id="${product_id}"]`).value;
+      var price = document.querySelector(`.product[data-product-id="${product_id}"] .product-price`).textContent;
+      price = price.replace('$', '');
+      var line_price = quantity * price;
+      document.querySelector(`.product[data-product-id="${product_id}"] .product-line-price`).textContent = '$' + line_price.toFixed(2);
     }
 
     recalculateCart();

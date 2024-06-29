@@ -33,3 +33,9 @@ def decrease_quantity_ajax(request, product_id):
     cart_item.quantity -= 1
     cart_item.save()
     return JsonResponse({'success': True, 'product': product.product_name})
+
+def remove_from_cart_ajax(request, product_id):
+    product = get_object_or_404(Display_Product, product_id=product_id)
+    cart_item = shopping_cart.objects.filter(user=request.user, product=product).first()
+    cart_item.delete()
+    return JsonResponse({'success': True, 'product': product.product_name})
