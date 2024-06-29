@@ -4,7 +4,6 @@ from ..models import Home_Product , Instagram_Post ,contact_us
 from ..forms import ContactForm
 from ..auto_emails import contact_form_recived_mail
 
-
 register = template.Library()
 
 @register.simple_tag

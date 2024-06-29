@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404
-from .models import Display_Product, Home_Product, Color, Catagory, Design_Catagory
+from .models import Display_Product, Home_Product, Color, Catagory, Design_Catagory , shopping_cart
 
 # Create your views here.
 
@@ -52,8 +52,31 @@ def user_logout(request):
 def user_login(request):
     return render(request, 'accounts/login.html')
 
-def shopping_cart(request):
-    return render(request, 'events/shopping_cart.html')
+def shopping_cart_view(request):
+    if request.user.is_authenticated:
+        user = request.user
+        cart_items = shopping_cart.objects.filter(user=user)
+        context = {
+            'cart_items': cart_items,
+        }
+        return render(request, 'events/shopping_cart.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def about_contact(request):
     return render(request, 'events/about_contact.html')

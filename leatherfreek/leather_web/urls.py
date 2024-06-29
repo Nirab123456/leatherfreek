@@ -21,10 +21,9 @@ urlpatterns = [
     path('index_trial/', views.index_trial, name='index_trial'),  
     path('product_card/<int:product_id>/', views.product_card, name='product_card'),
     path('view_products/<int:catagory_id>/', views.view_products, name='view_products'),
-    path('shopping_cart/', views.shopping_cart, name='shopping_cart'),
+    path('shopping_cart/', views.shopping_cart_view, name='shopping_cart'),
     #ajax
     path('add_to_cart_ajax/<int:product_id>/', ajax_view.add_to_cart_ajax, name='add_to_cart_ajax'),
-
 
 
     path('about-contact/', views.about_contact, name='about_contact'),
