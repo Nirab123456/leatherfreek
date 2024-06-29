@@ -1,6 +1,7 @@
 # leather_web/urls.py
 from django.urls import path
 from . import views  # Import your views
+from . import ajax_view
 
 urlpatterns = [
 
@@ -21,6 +22,9 @@ urlpatterns = [
     path('product_card/<int:product_id>/', views.product_card, name='product_card'),
     path('view_products/<int:catagory_id>/', views.view_products, name='view_products'),
     path('shopping_cart/', views.shopping_cart, name='shopping_cart'),
+    #ajax
+    path('add_to_cart_ajax/<int:product_id>/', ajax_view.add_to_cart_ajax, name='add_to_cart_ajax'),
+
 
 
     path('about-contact/', views.about_contact, name='about_contact'),

@@ -190,15 +190,18 @@
 
         </p>
       </div>
+      
       <div class="row">
 
         {% get_home_products as home_products %}
         {% for home_product in home_products %}
-        <div  class="col-md-6 col-lg-4">
-          <a href="{% url 'product_card' home_product.product.product_id %}">
+        <div style="margin-bottom: 10px;"  class="col-md-6 col-lg-4">
             <div  class="box">
               <div class="img-box">
+                <a href="{% url 'product_card' home_product.product.product_id %}">
+
                 <img src="{{ home_product.product.product_image.first.image.url }}" alt="{{ home_product.product.product_image.first.image.url }}">
+                </a>
               </div>
               <div class="detail-box">
                 <h5>
@@ -207,7 +210,7 @@
 
                 </h5>
 
-                <div class="price_box">
+                <div style="align-items: center;" class="price_box">
 
                   <h3>Color:</h3>
                   <div class="color-container" id="color-container">
@@ -219,7 +222,7 @@
 
                 </div>
 
-                <div class="price_box">
+                <div style="align-items: center;" class="price_box">
                   <h6 class="price_heading">
                     <span>$</span>
                     
@@ -228,9 +231,11 @@
 
 
                   </h6>
+                    <button class="btn my-2 my-sm-0 nav_cart-btn" type="button" onclick="addToCart({{ home_product.product.product_id }})" >
+                      <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
+                    </button>
                   <a href="">
-                    Buy Now
-                  </a>
+                    Buy 
                 </div>
 
               </div>
@@ -240,6 +245,7 @@
         {% endfor %}
 
       </div>
+
     </div>
   </section>
 
@@ -247,7 +253,28 @@
 
 
   {% include 'events/footer.html' %}
-
+  <script>
+    function addToCart(productId) {
+        const csrfToken = '{{ csrf_token }}';
+        
+        fetch(`/add_to_cart_ajax/${productId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`${data.item_name} added to cart!`);
+            } else {
+                alert('There was an error adding the item to the cart.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    </script>
   <!-- jQery -->
   <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   <!-- bootstrap js -->

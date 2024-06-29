@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us
+from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart
 
 @admin.register(Home_Product)
 class Home_ProductAdmin(admin.ModelAdmin):
@@ -70,5 +70,13 @@ class contact_usAdmin(admin.ModelAdmin):
     list_filter = ('contact_name', 'phone_number', 'contact_email', 'contact_message')
     ordering = ('contact_name',)
     search_fields = ('contact_name', 'phone_number', 'contact_email', 'contact_message')
+
+
+@admin.register(shopping_cart)
+class shopping_cartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'quantity')
+    list_filter = ('user', 'product', 'quantity')
+    ordering = ('product',)
+    search_fields = ('user', 'product', 'quantity')
     
 
