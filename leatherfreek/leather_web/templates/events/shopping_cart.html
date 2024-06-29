@@ -28,144 +28,14 @@
   <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   <!-- responsive style -->
   <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
-
   <style>
-    /* Reset and basic styling */
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f0f0f0;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .shopping-cart {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .column-labels {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #ccc;
-      font-weight: bold;
-    }
-
-    .column-labels > label {
-      flex: 1;
-      text-align: center;
-    }
-
-    .product {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #eee;
-    }
-
-    .product-image {
-      flex: 1;
-      text-align: center;
-    }
-
-    .product-image img {
-      max-width: 100px;
-      height: auto;
-    }
-
-    .product-details {
-      flex: 2;
-      padding-left: 10px;
-    }
-
-    .product-title {
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .product-price,
-    .product-quantity,
-    .product-removal,
-    .product-line-price {
-      flex: 1;
-      text-align: center;
-    }
-
-    .product-quantity input {
-      width: 40px;
-      text-align: center;
-    }
-
-    .remove-product {
-      background-color: #c66;
-      color: #fff;
-      border: none;
-      padding: 5px 10px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .remove-product:hover {
-      background-color: #a44;
-    }
-
-    .totals {
-      margin-top: 20px;
-      border-top: 2px solid #ccc;
-      padding-top: 10px;
-    }
-
-    .totals-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .totals-item > label {
-      flex: 1;
-      font-weight: bold;
-    }
-
-    .totals-value {
-      flex: 1;
-      text-align: right;
-    }
-
-    .checkout {
-      background-color: #6b6;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 16px;
-      float: right;
-      margin-top: 20px;
-    }
-
-    .checkout:hover {
-      background-color: #494;
-    }
-    .hidden {
-      display: none;
-    }
-
+    {% include 'style_logic/css/shopping_cart.css' %}
   </style>
   
 </head>
 <body>
 
-  <h1>Shopping Cart</h1>
+  <h1>Leather Cart</h1>
   
   <div class="shopping-cart">
     <div class="column-labels">
@@ -216,155 +86,22 @@
         <div class="totals-value" id="cart-total">${{ total }}</div>
       </div>
     </div>
-    
+    <div class="totals-item totals-item-total justify-content-center ">
+
     <button class="checkout">Checkout</button>
+
+    </div>
+
   </div>
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery for JavaScript operations -->
 
   <script>
-    var taxRate = 0.05; // 5% tax rate
-    var shippingRate = 15.00; // Fixed shipping rate
-    var fadeTime = 300; // Animation time
-    
-    /* Recalculate cart */
-    function recalculateCart() {
-      var subtotal = 0;
-    
-      /* Sum up row totals */
-      $('.product').each(function () {
-        subtotal += parseFloat($(this).find('.product-line-price').text().replace('$', ''));
-      });
-    
-      /* Calculate totals */
-      var tax = subtotal * taxRate;
-      var shipping = (subtotal > 0 ? shippingRate : 0); // Shipping applies if subtotal > 0
-      var total = subtotal + tax + shipping;
-    
-      /* Update totals display */
-      $('.totals-value').fadeOut(fadeTime, function() {
-        $('#cart-subtotal').text('$' + subtotal.toFixed(2));
-        $('#cart-tax').text('$' + tax.toFixed(2));
-        $('#cart-shipping').text('$' + shipping.toFixed(2));
-        $('#cart-total').text('$' + total.toFixed(2));
-        
-        // Show/hide checkout button based on total
-        if (total == 0) {
-          $('.checkout').fadeOut(fadeTime);
-        } else {
-          $('.checkout').fadeIn(fadeTime);
-        }
-        
-        $('.totals-value').fadeIn(fadeTime);
-      });
-    }
 
-    async function increase_quantity_ajax(product_id){
-      const csrf = '{{ csrf_token }}';
-      const response = await fetch(`/increase_quantity_ajax/${product_id}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrf,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        alert('Quantity increased!');
-      } else {
-        alert('There was an error increasing the quantity.');
-      }
-      recalculateCart();
-    }
+{% include 'style_logic/js/shopping_cart.js' %}
 
-    async function decrease_quantity_ajax(product_id){
-      const csrf = '{{ csrf_token }}';
-      const response = await fetch(`/decrease_quantity_ajax/${product_id}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrf,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        alert('Quantity decreased!');
-      } else {
-        alert('There was an error decreasing the quantity.');
-      }
-      recalculateCart();
-    }
-
-    function updateQuantity_ajax(product_id) {
-      // current value of the input field
-      const quantity = document.querySelector(`input[data-product-id="${product_id}"]`).value;
-
-      console.log(`Quantity from input field: ${quantity}`);
-
-      // find the hidden div tag
-      const hiddenDiv = document.querySelector(`div[data-previous-quantity-product-id="${product_id}"]`);
-
-      // check if hiddenDiv is found
-      if (!hiddenDiv) {
-        console.error(`No <div> tag found with data-product-id="${product_id}"`);
-        return; // exit the function early
-      }
-
-      // quantity previously stored in the div tag
-      const previous_quantity = hiddenDiv.textContent.trim();
-      // make it a number
-      const previous_quantity_number = parseInt(previous_quantity);
-
-      console.log(`Previous quantity from <div> tag: ${previous_quantity_number}`);
-
-      if (quantity > previous_quantity_number) {
-        increase_quantity_ajax(product_id);
-      } else if (quantity < previous_quantity_number) {
-        decrease_quantity_ajax(product_id);
-      }
-
-      // Update inline price immediately
-      update_inline_price(product_id);
-    }
-
-    /* Remove item from cart */
-    async function removeItem(product_id) {
-      const csrf = '{{ csrf_token }}';
-      const response = await fetch(`/remove_from_cart_ajax/${product_id}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': csrf,
-        },
-      });
-      const data = await response.json();
-      if (data.success) {
-        alert('Item removed from cart!');
-        // find the product element in the DOM
-        const productElement = document.querySelector(`.product[data-product-id="${product_id}"]`);
-        if (productElement) {
-          // remove the product element from the DOM
-          productElement.remove();
-          recalculateCart();
-        } else {
-          console.error(`No product element found with data-product-id="${product_id}"`);
-        }
-      } else {
-        alert('There was an error removing the item from the cart.');
-      }
-    }
-
-    function update_inline_price(product_id){
-      var quantity = document.querySelector(`input[data-product-id="${product_id}"]`).value;
-      var price = document.querySelector(`.product[data-product-id="${product_id}"] .product-price`).textContent;
-      price = price.replace('$', '');
-      var line_price = quantity * price;
-      document.querySelector(`.product[data-product-id="${product_id}"] .product-line-price`).textContent = '$' + line_price.toFixed(2);
-    }
-
-    recalculateCart();
   </script>
-  
+
 </body>
 </html>
 
