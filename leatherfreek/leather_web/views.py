@@ -59,8 +59,24 @@ def shopping_cart_view(request):
         context = {
             'cart_items': cart_items,
         }
-        return render(request, 'events/shopping_cart.html', context)
 
+    elif 'cart' in request.session:
+        cart = request.session['cart']
+        cart_items = []
+        for product_id in cart:
+            product = get_object_or_404(Display_Product, pk=product_id)
+            cart_items.append({
+                'product': product,
+                'quantity': cart[product_id]['quantity'],
+            })
+
+        context = {
+            'cart_items': cart_items,
+        }
+    else:
+        context = {}
+
+    return render(request, 'events/shopping_cart.html', context)
 
 
 

@@ -72,17 +72,21 @@ async function decrease_quantity_ajax(product_id){
 }
 
 function updateQuantity_ajax(product_id) {
+  const PRODUCT_ID = product_id;
+  // convert prodect id into number
+
+  console.log(`Product ID: ${PRODUCT_ID}`);
   // current value of the input field
-  const quantity = document.querySelector(`input[data-product-id="${product_id}"]`).value;
+  const quantity = document.querySelector(`input[data-product-id="${PRODUCT_ID}"]`).value;
 
   console.log(`Quantity from input field: ${quantity}`);
 
   // find the hidden div tag
-  const hiddenDiv = document.querySelector(`div[data-previous-quantity-product-id="${product_id}"]`);
+  const hiddenDiv = document.querySelector(`div[data-previous-quantity-product-id="${PRODUCT_ID}"]`);
 
   // check if hiddenDiv is found
   if (!hiddenDiv) {
-    console.error(`No <div> tag found with data-product-id="${product_id}"`);
+    console.error(`No <div> tag found with data-product-id="${PRODUCT_ID}"`);
     return; // exit the function early
   }
 
@@ -94,9 +98,9 @@ function updateQuantity_ajax(product_id) {
   console.log(`Previous quantity from <div> tag: ${previous_quantity_number}`);
 
   if (quantity > previous_quantity_number) {
-    increase_quantity_ajax(product_id);
+    increase_quantity_ajax(PRODUCT_ID);
   } else if (quantity < previous_quantity_number) {
-    decrease_quantity_ajax(product_id);
+    decrease_quantity_ajax(PRODUCT_ID);
   }
 
   // Update inline price immediately
