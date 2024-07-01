@@ -1,0 +1,153 @@
+
+{% load static %}
+{% load custom_tags %}
+
+  {% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="{% static 'images/logo_leather_freek.png' %}" type="image/gif" />
+
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>LeatherFreek</title>
+
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+
+  <!-- font awesome style -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+  
+  <title>Profile Page</title>
+  <style>
+    {% include 'style_logic/css/profile.css' %}
+  </style>
+
+</head>
+
+<body>
+  
+    <div class="furniture_section layout_padding leftbox">
+        <nav>
+          <a id="profile" class="active"><i class="fa fa-user"></i></a>
+          <a id="payment"><i class="fa fa-credit-card"></i></a>
+          <a id="subscription"><i class="fa fa-tv"></i></a>
+          <a id="privacy"><i class="fa fa-tasks"></i></a>
+          <a id="settings"><i class="fa fa-cog"></i></a>
+        </nav>
+
+      </div>
+
+
+  <div class="container-profile">
+    <div id="logo">
+      <h1 class="logo">hulu</h1>
+      <div class="CTA">
+        <h1>Get $10</h1>
+      </div>
+    </div>
+
+    <div class="rightbox">
+      <div class="profile">
+        <h1>Personal Info</h1>
+        <h2>Full Name</h2>
+        <p>Julie Park <button class="btn">update</button></p>
+        <h2>Birthday</h2>
+        <p>July 21</p>
+        <h2>Gender</h2>
+        <p>Female</p>
+        <h2>Email</h2>
+        <p>example@example.com <button class="btn">update</button></p>
+        <h2>Password </h2>
+        <p>••••••• <button class="btn">Change</button></p>
+      </div>
+      <div class="payment noshow">
+        <h1>Payment Info</h1>
+        <h2>Payment Method</h2>
+        <p>Mastercard •••• •••• •••• 0000 <button class="btn">update</button></p>
+        <h2>Billing Address</h2>
+        <p>1234 Example Ave | Seattle, WA <button class="btn">change</button></p>
+        <h2>Zipcode</h2>
+        <p>999000</p>
+        <h2>Billing History</h2>
+        <p>2018<button class="btn">view</button></p>
+        <h2>Redeem Gift Subscription </h2>
+        <p><input type="text" placeholder="Enter Gift Code"> <button class="btn">Redeem</button></p>
+      </div>
+      <div class="subscription noshow">
+        <h1>Your Subscription</h1>
+        <h2>Payment Date</h2>
+        <p>05-15-2018 <button class="btn">pay now</button></p>
+        <h2>Your Next Charge</h2>
+        <p>$8.48<span> includes tax</span></p>
+        <h2>Hulu Base Plan</h2>
+        <p>Limited Commercials <button class="btn">change plan</button></p>
+        <h2>Add-ons</h2>
+        <p>None <button class="btn">manage</button></p>
+        <h2>Monthly Recurring Total </h2>
+        <p>$7.99/month</p>
+      </div>
+      <div class="privacy noshow">
+        <h1>Privacy Settings</h1>
+        <h2>Manage Email Notifications<button class="btn">manage</button></h2>
+        <h2>Manage Privacy Settings<button class="btn">manage</button></h2>
+        <h2>View Terms of Use <button class="btn">view</button></h2>
+        <h2>Personalize Ad Experience <button class="btn">update</button></h2>
+        <h2>Protect Your Account <button class="btn">protect</button></h2>
+      </div>
+      <div class="settings noshow">
+        <h1>Account Settings</h1>
+        <h2>Sync Watchlist to My Stuff<button class="btn">sync</button></h2>
+        <h2>Hold Your Subscription<button class="btn">hold</button></h2>
+        <h2>Cancel Your Subscription <button class="btn">cancel</button></h2>
+        <h2>Your Devices <button class="btn">Manage Devices</button></h2>
+        <h2>Referrals <button class="btn">get $10</button></h2>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <footer>
+    <p>made by <a href="https://codepen.io/juliepark"> julie</a> ♡</p>
+  </footer>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('nav a').click(function(e) {
+        e.preventDefault();
+        $('nav a').removeClass('active');
+        $(this).addClass('active');
+        const sectionId = $(this).attr('id');
+        $('.rightbox > div').addClass('noshow');
+        $('.' + sectionId).removeClass('noshow');
+      });
+    });
+  </script>
+</body>
+</html>
+
+{% endblock content %}
+
+
+
+
+
+

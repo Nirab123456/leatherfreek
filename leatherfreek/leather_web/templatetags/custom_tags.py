@@ -3,6 +3,7 @@ from django import template
 from ..models import Home_Product , Instagram_Post ,contact_us
 from ..forms import ContactForm
 from ..auto_emails import contact_form_recived_mail
+from django.contrib.auth.models import User
 
 register = template.Library()
 
@@ -37,6 +38,7 @@ def handle_contact_form(request):
                 return True  # Return True to indicate successful submission
         
     return False  # Return False if form submission failed or if request method is not POST
+
 
 
 @register.filter

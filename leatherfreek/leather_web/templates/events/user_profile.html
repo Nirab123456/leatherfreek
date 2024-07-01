@@ -1,1 +1,157 @@
-<h1>profile </h1>
+{% load static %}
+{% load custom_tags %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <link rel="icon" href="{% static 'images/logo_leather_freek.png' %}" type="image/gif" />
+
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>LeatherFreek</title>
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+  <!-- font awesome style -->
+  <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'css/responsive.css' %}" rel="stylesheet" />
+  
+  <title>Profile Page</title>
+  <style>
+    {% include 'style_logic/css/profile.css' %}
+  </style>
+
+</head>
+
+<body>
+
+  <div class="">
+    {% include 'events/head_nav.html' %}
+  </div>
+
+<div class="container">
+    <div class="view-account">
+        <section class="module">
+            <div class="module-inner">
+                <div class="side-bar">
+                    <nav class="side-menu">
+                        <ul class="nav">
+                            <li class="active"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
+                            <li><a href="#"><span class="fa fa-cog"></span> Settings</a></li>
+                            <li><a href="#"><span class="fa fa-credit-card"></span> Orders</a></li>
+                            <li><a href="#"><span class="fa fa-envelope"></span> Messages</a></li>
+                            <li><a href="user-drive.html"><span class="fa fa-th"></span> Drive</a></li>
+                            <li><a href="#"><span class="fa fa-clock-o"></span> Reminders</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="content-panel">
+                    <h2 class="title">Profile<span class="pro-label label label-warning">PRO</span></h2>
+                    <form id="profileForm" class="form-horizontal" action="{% url 'update_profile' %}" >
+                      {% csrf_token %}
+                      <fieldset class="fieldset">
+                          <h3 class="fieldset-title">Personal Info</h3>
+                          <div class="form-group">
+                              <label class="col-md-2 col-sm-3 col-xs-12 control-label">User Name</label>
+                              <div class="col-md-10 col-sm-9 col-xs-12">
+                                  <input type="text" name="user_name" class="form-control" value="{{ user.user_name }}">
+                              </div>
+                          </div>
+                        <div class="row">
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label name="first_name" class="control-label">First Name</label>
+                                <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                            </div>
+                        </div>
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label name="last_name" class="control-label">Last Name</label>
+                                    <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+                                </div>
+                            </div>
+                      </div>
+                    </fieldset>
+                    <fieldset class="fieldset">
+                          <h3 class="fieldset-title">Contact Info</h3>
+                          <div class="row">
+                              <div class="col-md-4 col-sm-6 col-xs-12">
+                                  <div class="form-group">
+                                      <label class="control-label">Email</label>
+                                      <input type="text" type="email" class="form-control" value="{{ user.email|default_if_none:user.user_email|default:user.user_email }}">
+                                  </div>
+                              </div>
+                              <div class="col-md-4 col-sm-6 col-xs-12">
+                                  <div class="form-group">
+                                      <label class="control-label">Phone</label>
+                                      <input name="user_phone" type="number" class="form-control" value="{{ user.user_phone }}">
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                              <div class="form-group">
+                                  <label class="control-label">ADDRESS</label>
+                                  <input name="address" type="text" class="form-control" value="{{ user.address }}">
+                              </div>
+                          </div>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                  <div class="form-group">
+                                      <label class="control-label">Country</label>
+                                      <input name="country" type="text" class="form-control" value="{{ user.country }}">
+                                  </div>
+                              </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4 col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label class="control-label">ZIP</label>
+                                <input name="zip" type="text" class="form-control" value="{{ user.zip_code }}">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                          <div class="form-group">
+                              <label class="control-label">City</label>
+                              <input name="city" type="text" class="form-control" value="{{ user.city }}">
+                          </div>
+                      </div>
+                  </div>                     
+                      </fieldset>
+                        <hr>
+                        <div class="form-group justify-content-center">
+                            <button id="updateProfileBtn" class="btn btn-primary" type="submit">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+</body>
+
+<script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+<!-- bootstrap js -->
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<!-- custom js -->
+<script src="{% static 'js/custom.js' %}"></script>
+   
+
+</html>
+
+{% endblock content %}

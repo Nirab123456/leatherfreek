@@ -164,8 +164,9 @@ EMAIL_HOST_PASSWORD = 'RImajumder@123'
 DEFAULT_FROM_EMAIL = 'security.auth@leatherfreek.ca'
 SERVER_EMAIL = 'security.auth@leatherfreek.ca'
 
+ACCOUNT_EMAIL_REQUIRED = True
 
-
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 
 
 SOCIALACCOUNT_PROVIDERS = {

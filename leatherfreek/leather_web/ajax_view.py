@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
-from .models import Display_Product, shopping_cart
+from .models import Display_Product, shopping_cart , User_Record
 
 @require_POST
 def add_to_cart_ajax(request, product_id):
@@ -110,5 +110,36 @@ def remove_from_cart_ajax(request, product_id):
 
     return JsonResponse({'success': True, 'product': product.product_name})
 
+def update_profile_ajax(request):
+    if request.method == 'GET':
+        user = request.user
+        user_record = get_object_or_404(User_Record, user=user)
+
+        # Extract data from the POST request
+        first_name = request.GET.get('first_name')
+        last_name = request.GET.get('last_name')
+        user_email = request.GET.get('user_email')
+        user_phone = request.GET.get('user_phone')
+        country = request.GET.get('country')
+        city = request.GET.get('city')
+        zip_code = request.GET.get('zip')
+        address = request.GET.get('address')
+        print(first_name)
+
+
+        # Update the user record
+        user_record.first_name = first_name
+        user_record.last_name = last_name
+        user_record.user_email = user_email
+        user_record.user_phone = user_phone
+        user_record.country = country
+        user_record.city = city
+        user_record.zip_code = zip_code
+        user_record.address = address
+        user_record.save()
+
+        return JsonResponse({'status': 'success'}, status=200)
+    else:
+        return JsonResponse({'status': 'fail', 'message': 'Invalid request method.'}, status=400)
 
 

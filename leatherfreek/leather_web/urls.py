@@ -10,6 +10,7 @@ urlpatterns = [
     path('accounts/signup/', views.user_signup, name='user_signup'),
     path('accounts/login/', views.user_login, name='user_login'),
     path('accounts/logout/', views.user_logout, name='user_logout'),
+    path('update_profile/', views.update_profile, name='update_profile'),
 
 
 
@@ -27,6 +28,7 @@ urlpatterns = [
     path('increase_quantity_ajax/<int:product_id>/', ajax_view.increase_quantity_ajax, name='increase_quantity_ajax'),
     path('decrease_quantity_ajax/<int:product_id>/', ajax_view.decrease_quantity_ajax, name='decrease_quantity_ajax'),
     path('remove_from_cart_ajax/<int:product_id>/', ajax_view.remove_from_cart_ajax, name='remove_from_cart_ajax'),
+
 
 
     path('about-contact/', views.about_contact, name='about_contact'),

@@ -1,7 +1,25 @@
-from django.shortcuts import render , get_object_or_404
-from .models import Display_Product, Home_Product, Color, Catagory, Design_Catagory , shopping_cart
+from django.shortcuts import render , get_object_or_404 ,redirect
+from .models import Display_Product, Home_Product, Color, Catagory, Design_Catagory , shopping_cart , User_Record
+from django.contrib.auth.models import User
 
 # Create your views here.
+
+def user_profile(request):
+    if request.user.is_authenticated:
+        user = request.user
+        user_record, created = User_Record.objects.get_or_create(user=user)
+        print('user rewcord',user_record)
+        if user_record:
+            return render(request, 'events/user_profile.html', {'user': user_record})
+        else:        
+            user_record = User.objects.filter(username=user.username).first()
+            return render(request, 'events/user_profile.html', {'user': user_record})
+
+    else:
+        return redirect('user_login')
+    
+
+
 
 def home(request):
     return render(request, 'events/index.html')
@@ -40,8 +58,7 @@ def view_products(request, catagory_id):
     return render(request, 'events/view_products.html', context)
 
 
-def user_profile(request):
-    return render(request, 'events/user_profile.html')
+
 
 def user_signup(request):
     return render(request, 'accounts/signup.html')
@@ -79,11 +96,33 @@ def shopping_cart_view(request):
     return render(request, 'events/shopping_cart.html', context)
 
 
+def update_profile(request):
+    if request.method == 'GET':
+        user = request.user
+        user_record, created = User_Record.objects.get_or_create(user=user)
+        print('request', request)
+        
+        # Update user record with data from GET parameters
+        user_record.user_name = request.GET.get('user_name', user_record.user_name)
+        user_record.first_name = request.GET.get('first_name', user_record.first_name)
+        user_record.last_name = request.GET.get('last_name', user_record.last_name)
+        user_record.user_email = request.GET.get('user_email', user_record.user_email)
+        user_record.user_phone = request.GET.get('user_phone', user_record.user_phone)
+        user_record.country = request.GET.get('country', user_record.country)
+        user_record.city = request.GET.get('city', user_record.city)
+        user_record.zip_code = request.GET.get('zip', user_record.zip_code)
+        user_record.address = request.GET.get('address', user_record.address)
+        
+        user_record.save()
+        context = {
+            'user': user_record,
+        } 
+        return render(request, 'events/user_profile.html', context)
 
-
-
-
-
+    else:
+        user = request.user
+        user_record = User_Record.objects.filter(user=user).first()
+        return render(request, 'events/user_profile.html', {'user': user_record})
 
 
 

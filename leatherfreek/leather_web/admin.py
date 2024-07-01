@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart
+from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart , User_Record
 
 @admin.register(Home_Product)
 class Home_ProductAdmin(admin.ModelAdmin):
@@ -79,4 +79,15 @@ class shopping_cartAdmin(admin.ModelAdmin):
     ordering = ('product',)
     search_fields = ('user', 'product', 'quantity')
     
+
+@admin.register(User_Record)
+class User_RecordAdmin(admin.ModelAdmin):
+    list_display = ('first_name','last_name', 'user_name' , 'user_email' , 'user_phone' , 'country' , 'city' , 'zip_code')
+    list_filter = ('first_name','last_name', 'user_name' , 'user_email' , 'user_phone' , 'country' , 'city' , 'zip_code')
+    ordering = ('user_name',)
+    search_fields = ('first_name','last_name', 'user_name' , 'user_email' , 'user_phone' , 'country' , 'city' , 'zip_code')
+    
+
+
+
 
