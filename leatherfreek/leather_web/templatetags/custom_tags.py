@@ -35,9 +35,9 @@ def handle_contact_form(request):
 
 
                 form.save()  # Save the form data to the database
-                return True  # Return True to indicate successful submission
+                return 'Your massage has been send. Thank you'
         
-    return False  # Return False if form submission failed or if request method is not POST
+    return  'Send a Text to us'
 
 
 

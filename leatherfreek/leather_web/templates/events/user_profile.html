@@ -51,92 +51,107 @@
                 <div class="side-bar">
                     <nav class="side-menu">
                         <ul class="nav">
-                            <li class="active"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
-                            <li><a href="#"><span class="fa fa-cog"></span> Settings</a></li>
-                            <li><a href="#"><span class="fa fa-credit-card"></span> Orders</a></li>
-                            <li><a href="#"><span class="fa fa-envelope"></span> Messages</a></li>
-                            <li><a href="user-drive.html"><span class="fa fa-th"></span> Drive</a></li>
-                            <li><a href="#"><span class="fa fa-clock-o"></span> Reminders</a></li>
+                            <li class="active"><a href="#" class="nav-link" data-target="#profile-container"><span class="fa fa-user"></span> Profile</a></li>
+                            <li><a href="#" class="nav-link" data-target="#settings-container"><span class="fa fa-cog"></span> Settings</a></li>
+                            <li><a href="#" class="nav-link" data-target="#orders-container"><span class="fa fa-credit-card"></span> Orders</a></li>
+                            <li><a href="#" class="nav-link" data-target="#messages-container"><span class="fa fa-envelope"></span> Messages</a></li>
+                            <li><a href="user-drive.html" class="nav-link" data-target="#drive-container"><span class="fa fa-th"></span> Drive</a></li>
+                            <li><a href="#" class="nav-link" data-target="#reminders-container"><span class="fa fa-clock-o"></span> Reminders</a></li>
                         </ul>
                     </nav>
                 </div>
-                <div class="content-panel">
-                    <h2 class="title">Profile<span class="pro-label label label-warning">PRO</span></h2>
-                    <form id="profileForm" class="form-horizontal" action="{% url 'update_profile' %}" >
-                      {% csrf_token %}
-                      <fieldset class="fieldset">
-                          <h3 class="fieldset-title">Personal Info</h3>
+                <div class="content-panel" id="profile-container">
+                  <h2 class="title">Profile<span class="pro-label label label-warning">PRO</span></h2>
+                  <form id="profileForm" class="form-horizontal" action="{% url 'update_profile' %}" >
+                    {% csrf_token %}
+                    <fieldset class="fieldset">
+                        <h3 class="fieldset-title">Personal Info</h3>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">User Name</label>
+                            <div class="col-md-10 col-sm-9 col-xs-12">
+                                <input type="text" name="user_name" class="form-control" value="{{ user.user_name }}">
+                            </div>
+                        </div>
+                      <div class="row">
+                        <div class="col-md-4 col-sm-6 col-xs-12">
                           <div class="form-group">
-                              <label class="col-md-2 col-sm-3 col-xs-12 control-label">User Name</label>
-                              <div class="col-md-10 col-sm-9 col-xs-12">
-                                  <input type="text" name="user_name" class="form-control" value="{{ user.user_name }}">
+                              <label name="first_name" class="control-label">First Name</label>
+                              <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                          </div>
+                      </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12">
+                              <div class="form-group">
+                                  <label name="last_name" class="control-label">Last Name</label>
+                                  <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
                               </div>
                           </div>
+                    </div>
+                  </fieldset>
+                  <fieldset class="fieldset">
+                        <h3 class="fieldset-title">Contact Info</h3>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Email</label>
+                                    <input type="text" type="email" class="form-control" value="{{ user.email|default_if_none:user.user_email|default:user.user_email }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Phone</label>
+                                    <input name="user_phone" type="number" class="form-control" value="{{ user.user_phone }}">
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                           <div class="col-md-4 col-sm-6 col-xs-12">
                             <div class="form-group">
-                                <label name="first_name" class="control-label">First Name</label>
-                                <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+                                <label class="control-label">ADDRESS</label>
+                                <input name="address" type="text" class="form-control" value="{{ user.address }}">
                             </div>
                         </div>
-                          <div class="col-md-4 col-sm-6 col-xs-12">
+                              <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class="form-group">
-                                    <label name="last_name" class="control-label">Last Name</label>
-                                    <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+                                    <label class="control-label">Country</label>
+                                    <input name="country" type="text" class="form-control" value="{{ user.country }}">
                                 </div>
                             </div>
                       </div>
-                    </fieldset>
-                    <fieldset class="fieldset">
-                          <h3 class="fieldset-title">Contact Info</h3>
-                          <div class="row">
-                              <div class="col-md-4 col-sm-6 col-xs-12">
-                                  <div class="form-group">
-                                      <label class="control-label">Email</label>
-                                      <input type="text" type="email" class="form-control" value="{{ user.email|default_if_none:user.user_email|default:user.user_email }}">
-                                  </div>
-                              </div>
-                              <div class="col-md-4 col-sm-6 col-xs-12">
-                                  <div class="form-group">
-                                      <label class="control-label">Phone</label>
-                                      <input name="user_phone" type="number" class="form-control" value="{{ user.user_phone }}">
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-4 col-sm-6 col-xs-12">
-                              <div class="form-group">
-                                  <label class="control-label">ADDRESS</label>
-                                  <input name="address" type="text" class="form-control" value="{{ user.address }}">
-                              </div>
-                          </div>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                  <div class="form-group">
-                                      <label class="control-label">Country</label>
-                                      <input name="country" type="text" class="form-control" value="{{ user.country }}">
-                                  </div>
-                              </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4 col-sm-6 col-xs-12">
-                            <div class="form-group">
-                                <label class="control-label">ZIP</label>
-                                <input name="zip" type="text" class="form-control" value="{{ user.zip_code }}">
-                            </div>
-                        </div>
+                      <div class="row">
                         <div class="col-md-4 col-sm-6 col-xs-12">
                           <div class="form-group">
-                              <label class="control-label">City</label>
-                              <input name="city" type="text" class="form-control" value="{{ user.city }}">
+                              <label class="control-label">ZIP</label>
+                              <input name="zip" type="text" class="form-control" value="{{ user.zip_code }}">
                           </div>
                       </div>
-                  </div>                     
-                      </fieldset>
-                        <hr>
-                        <div class="form-group justify-content-center">
-                            <button id="updateProfileBtn" class="btn btn-primary" type="submit">Update Profile</button>
+                      <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label">City</label>
+                            <input name="city" type="text" class="form-control" value="{{ user.city }}">
                         </div>
-                    </form>
+                    </div>
+                </div>                     
+                    </fieldset>
+                      <hr>
+                      <div class="form-group justify-content-center">
+                          <button id="updateProfileBtn" class="btn btn-primary" type="submit">Update Profile</button>
+                      </div>
+                  </form>
+                </div>
+                <div class="content-panel" id="settings-container" style="display: none;">
+                    <h2>Settings Content</h2>
+                </div>
+                <div class="content-panel" id="orders-container" style="display: none;">
+                    <h2>Orders Content</h2>
+                </div>
+                <div class="content-panel" id="messages-container" style="display: none;">
+                    <h2>Messages Content</h2>
+                </div>
+                <div class="content-panel" id="drive-container" style="display: none;">
+                    <h2>Drive Content</h2>
+                </div>
+                <div class="content-panel" id="reminders-container" style="display: none;">
+                    <h2>Reminders Content</h2>
                 </div>
             </div>
         </section>
@@ -150,8 +165,29 @@
 <script src="{% static 'js/bootstrap.js' %}"></script>
 <!-- custom js -->
 <script src="{% static 'js/custom.js' %}"></script>
-   
 
+<script>
+  $(document).ready(function() {
+    $('.nav-link').on('click', function(e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      $('.content-panel').hide();
+      $(target).show();
+      $('.nav li').removeClass('active');
+      $(this).closest('li').addClass('active');
+    });
+  });
+</script>
 </html>
 
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+

@@ -139,4 +139,24 @@ class shopping_cart(models.Model):
         return f"{self.product.product_name} - {self.quantity}"
 
 
+class Coupon(models.Model):
 
+    user_id = models.ManyToManyField(User, blank=True, null=True)
+    cupon_id = models.AutoField(primary_key=True)
+    
+    DISCOUNT_TYPE_CHOICES = [
+        ('percentage', 'Percentage Discount'),
+        ('gift', 'Gift Coupon'),
+        ('fixed', 'Fixed Amount Discount')
+    ]
+
+    code = models.CharField(max_length=50, unique=True)
+    discount_type = models.CharField(max_length=10, choices=DISCOUNT_TYPE_CHOICES)
+    discount_value = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    gift_item = models.ForeignKey(Display_Product, on_delete=models.CASCADE, blank=True, null=True)
+    valid_from = models.DateTimeField()
+    valid_to = models.DateTimeField()
+    active = models.BooleanField()
+
+    def __str__(self):
+        return self.code

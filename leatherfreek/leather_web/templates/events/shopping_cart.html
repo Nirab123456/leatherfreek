@@ -31,7 +31,6 @@
   <style>
     {% include 'style_logic/css/shopping_cart.css' %}
   </style>
-  
 </head>
 <body>
 
@@ -68,7 +67,25 @@
     </div>
     {% endfor %}
     
-  
+    <!-- Apply Coupon Form -->
+
+    <div style="margin-top: 5px;" class="row" >
+
+      <div class="col-md-4 col-sm-6 col-xs-12">
+        <form method="POST" action="#">
+          {% csrf_token %}
+
+        <div class="form-group">
+            <label class="control-label">Apply Cupon</label>
+            <input name="coupon_code" type="text" class="form-control" value="">
+        </div>
+        <button class="btn btn-warning" type="submit">Apply Coupon</button>
+
+        </form>
+      </div>
+
+    </div>
+
     <div class="totals">
       <div class="totals-item">
         <label>Subtotal</label>
@@ -87,20 +104,14 @@
         <div class="totals-value" id="cart-total">${{ total }}</div>
       </div>
     </div>
-    <div class="totals-item totals-item-total justify-content-center ">
-
-    <button class="checkout">Checkout</button>
-
+    <div class="totals-item totals-item-total justify-content-center">
+      <button class="checkout">Checkout</button>
     </div>
-
   </div>
-  
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery for JavaScript operations -->
-
   <script>
-
-{% include 'style_logic/js/shopping_cart.js' %}
-
+    {% include 'style_logic/js/shopping_cart.js' %}
   </script>
 
 </body>

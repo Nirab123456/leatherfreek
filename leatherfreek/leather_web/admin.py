@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart , User_Record
+from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart , User_Record , Coupon
 
 @admin.register(Home_Product)
 class Home_ProductAdmin(admin.ModelAdmin):
@@ -90,4 +90,9 @@ class User_RecordAdmin(admin.ModelAdmin):
 
 
 
-
+@admin.register(Coupon)
+class CouponAdmin(admin.ModelAdmin):
+    list_display = ('code', 'discount_type', 'discount_value', 'gift_item', 'valid_from', 'valid_to', 'active')
+    list_filter = ('discount_type', 'gift_item')
+    ordering = ('valid_to',)
+    search_fields = ('code', 'discount_type', 'gift_item')
