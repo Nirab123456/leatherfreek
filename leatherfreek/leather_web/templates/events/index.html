@@ -249,6 +249,7 @@
                     </button>
                   <a href="">
                     Buy 
+                  </a>
                 </div>
 
               </div>
@@ -267,27 +268,11 @@
 
   {% include 'events/footer.html' %}
   <script>
-    function addToCart(productId) {
-        const csrfToken = '{{ csrf_token }}';
-        
-        fetch(`/add_to_cart_ajax/${productId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(`${data.item_name} added to cart!`);
-            } else {
-                alert('There was an error adding the item to the cart.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    </script>
+
+    {% include 'style_logic/js/add_to_cart.js' %}
+
+  </script>
+  
   <!-- jQery -->
   <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   <!-- bootstrap js -->

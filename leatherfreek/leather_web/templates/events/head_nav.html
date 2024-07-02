@@ -41,8 +41,8 @@
       </div>
       {% if user.is_authenticated %}
       <div class="quote_btn-container">
-        <a href="{% url 'user_logout' %}">
-          <span>Logout</span>
+        <a href="{% url 'user_profile' %}">
+          <span>Profile</span>
           <i class="fa fa-user" aria-hidden="true"></i>
         </a>
         <a href="{% url 'shopping_cart' %}">

@@ -143,9 +143,13 @@
 
 
                 </h6>
+                <button class="btn my-2 my-sm-0 nav_cart-btn" type="button" onclick="addToCart({{ product.product_id }})" >
+                  <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
+                </button>
                 <a href="">
                   Buy Now
                 </a>
+
               </div>
 
             </div>
@@ -257,6 +261,11 @@
   <!-- end furniture section -->
 
 
+  <script>
+
+    {% include 'style_logic/js/add_to_cart.js' %}
+
+  </script>
 
 
   <!-- End Google Map -->
