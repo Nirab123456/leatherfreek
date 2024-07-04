@@ -91,6 +91,9 @@ function updateQuantity_ajax(product_id) {
   } else if (quantity < previous_quantity_number) {
     decrease_quantity_ajax(PRODUCT_ID);
   }
+  // update hidden div with new quantity
+  hiddenDiv.textContent = quantity;
+  
 
   // Update inline price immediately
   update_inline_price(product_id);
@@ -157,7 +160,13 @@ async function apply_coupon_code(event) {
     alert('There was an error applying the coupon code.');
   }
 }
-
+document.addEventListener('DOMContentLoaded', function() {
+  const colorDivs = document.querySelectorAll('.color-viewer');
+  colorDivs.forEach(div => {
+      const hexCode = div.getAttribute('data-hex');
+      div.style.backgroundColor = hexCode;
+  });
+});
 
 
 recalculateCart();

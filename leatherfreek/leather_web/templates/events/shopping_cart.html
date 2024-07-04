@@ -63,8 +63,20 @@
           </div>
           <div class="product-details">
             <h1><strong>{{ item.product.product_name }}</strong></h1>
-            <p><strong>Navy, Size 18</strong></p>
-            <p>Product Code - 232321939</p>
+
+
+
+
+            <p>{{ item.product.product_title }}</p>
+
+            <div style="margin-top: 10px;" class="color-container" id="color-container">
+              {% for color in item.product.product_color.all %}
+
+                  <div class="color-viewer" data-hex="{{ color.hex_code }}" title="{{ color.color_name }}"></div>
+              {% endfor %}
+          </div>
+
+            
           </div>
         </div>
         <div class="price">${{ item.product.product_price }}</div>
