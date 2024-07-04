@@ -134,8 +134,10 @@ function update_inline_price(product_id){
 async function apply_coupon_code(event) {
   event.preventDefault(); // Prevent the default form submission
   const csrf = '{{ csrf_token }}';
-  const coupon_code = document.querySelector('#coupon_code').value;
+  const coupon_code = document.querySelector('#promo-code').value;
+  const grand_total = document.querySelector('#cart-total').textContent;
   console.log(`Coupon code: ${coupon_code}`);
+  console.log(`Grand total: ${grand_total}`);
 
   try {
     const response = await fetch(`/apply_coupon_code_ajax/`, {
@@ -146,6 +148,7 @@ async function apply_coupon_code(event) {
       },
       body: JSON.stringify({
         coupon_code: coupon_code,
+        grand_total: grand_total,
       }),
     });
 
@@ -160,6 +163,7 @@ async function apply_coupon_code(event) {
     alert('There was an error applying the coupon code.');
   }
 }
+
 document.addEventListener('DOMContentLoaded', function() {
   const colorDivs = document.querySelectorAll('.color-viewer');
   colorDivs.forEach(div => {

@@ -1,7 +1,12 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
-from .models import Display_Product, shopping_cart , User_Record
+from .models import Display_Product, shopping_cart , User_Record , Coupon
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 def add_to_cart_ajax(request, product_id):
     product = get_object_or_404(Display_Product, product_id=product_id)
@@ -110,6 +115,40 @@ def remove_from_cart_ajax(request, product_id):
         request.session.modified = True
 
     return JsonResponse({'success': True, 'product': product.product_name})
+
+
+
+@csrf_exempt
+def apply_coupon_code_ajax(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            coupon_code = data.get('coupon_code')
+            grand_total = data.get('grand_total')
+            print(f'Coupon code: {coupon_code}')
+            print(f'Grand total: {grand_total}')
+
+            coupon = Coupon.objects.filter(code=coupon_code).first()
+            print(coupon)
+            
+            if coupon:
+                # Apply any discount or validation logic here
+                return JsonResponse({'success': True, 'coupon': coupon.code})
+            else:
+                return JsonResponse({'success': False, 'error': 'Invalid coupon code'})
+        except json.JSONDecodeError as e:
+            print('JSON decode error:', e)
+            return JsonResponse({'success': False, 'error': 'Invalid JSON'})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+
+
+
+
+
+
 
 def update_profile_ajax(request):
     if request.method == 'GET':

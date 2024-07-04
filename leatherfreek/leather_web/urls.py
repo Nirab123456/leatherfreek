@@ -28,6 +28,7 @@ urlpatterns = [
     path('increase_quantity_ajax/<int:product_id>/', ajax_view.increase_quantity_ajax, name='increase_quantity_ajax'),
     path('decrease_quantity_ajax/<int:product_id>/', ajax_view.decrease_quantity_ajax, name='decrease_quantity_ajax'),
     path('remove_from_cart_ajax/<int:product_id>/', ajax_view.remove_from_cart_ajax, name='remove_from_cart_ajax'),
+    path('apply_coupon_code_ajax/', ajax_view.apply_coupon_code_ajax, name='apply_coupon_code_ajax'),
 
 
 
