@@ -124,7 +124,7 @@ def apply_coupon_code_ajax(request):
         try:
             data = json.loads(request.body.decode('utf-8'))
             coupon_code = data.get('coupon_code')
-            grand_total = data.get('grand_total')
+            grand_total = float(data.get('grand_total'))
             print(f'Coupon code: {coupon_code}')
             print(f'Grand total: {grand_total}')
 
@@ -133,7 +133,23 @@ def apply_coupon_code_ajax(request):
             
             if coupon:
                 # Apply any discount or validation logic here
-                return JsonResponse({'success': True, 'coupon': coupon.code})
+                if coupon.discount_type == 'percentage':
+                    discount_amount = coupon.discount_value 
+                    #convert discount_amount to float
+                    discount_amount = float(discount_amount)
+                    grand_total -= (grand_total * discount_amount) / 100
+                    grand_total -= discount_amount
+                elif coupon.discount_type == 'fixed':
+                    grand_total -= coupon.discount_value
+                elif coupon.discount_type == 'gift':
+                    # You can add the gift item to the cart here
+                    pass
+                else:
+                    return JsonResponse({'success': False, 'error': 'Invalid coupon type'})
+                
+                print('Grand total after discount:', grand_total)
+                
+                return JsonResponse({'success': True, 'grand_total': float(grand_total)})
             else:
                 return JsonResponse({'success': False, 'error': 'Invalid coupon code'})
         except json.JSONDecodeError as e:
@@ -141,10 +157,6 @@ def apply_coupon_code_ajax(request):
             return JsonResponse({'success': False, 'error': 'Invalid JSON'})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
-
-
-
-
 
 
 

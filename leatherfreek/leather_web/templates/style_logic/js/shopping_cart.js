@@ -155,6 +155,7 @@ async function apply_coupon_code(event) {
     const data = await response.json();
     if (data.success) {
       alert('Coupon code applied!');
+      document.querySelector('#cart-total').textContent = data.grand_total.toFixed(2);
     } else {
       alert('There was an error applying the coupon code.');
     }
