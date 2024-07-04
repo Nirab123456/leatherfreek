@@ -160,3 +160,33 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
+
+
+class Checkout(models.Model):
+    checkout_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    coupon = models.ForeignKey('Coupon', on_delete=models.CASCADE, blank=True, null=True)
+    coupon_discount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    grand_total = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_address = models.TextField(null=True, blank=True)
+    shipping_city = models.CharField(max_length=100, null=True, blank=True)
+    shipping_country = models.CharField(max_length=100, null=True, blank=True)
+    shipping_zip_code = models.CharField(max_length=10, null=True, blank=True)
+    shipping_phone = models.CharField(max_length=15, null=True, blank=True)
+    payment_method = models.CharField(max_length=50, null=True, blank=True)
+    order_date = models.DateTimeField(auto_now_add=True)
+    order_status = models.CharField(max_length=50, default='Pending')
+
+    def __str__(self):
+        return f"Checkout {self.checkout_id} by {self.user}"
+
+class CheckoutItem(models.Model):
+    checkout = models.ForeignKey(Checkout, related_name='items', on_delete=models.CASCADE)
+    product = models.ForeignKey('Display_Product', on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    item_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.product.product_name} - {self.quantity}"

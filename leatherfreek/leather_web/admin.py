@@ -2,7 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart , User_Record , Coupon
+from .models import Display_Product , ProductImage , Color , Catagory , Design_Catagory , Home_Product , Volume_Description , Instagram_Post ,contact_us ,shopping_cart , User_Record , Coupon 
+from .models import Checkout ,CheckoutItem
 
 @admin.register(Home_Product)
 class Home_ProductAdmin(admin.ModelAdmin):
@@ -90,9 +91,23 @@ class User_RecordAdmin(admin.ModelAdmin):
 
 
 
-@admin.register(Coupon)
-class CouponAdmin(admin.ModelAdmin):
-    list_display = ('code', 'discount_type', 'discount_value', 'gift_item', 'valid_from', 'valid_to', 'active')
-    list_filter = ('discount_type', 'gift_item')
-    ordering = ('valid_to',)
-    search_fields = ('code', 'discount_type', 'gift_item')
+class CheckoutItemInline(admin.TabularInline):
+    model = CheckoutItem
+    extra = 1
+
+@admin.register(Checkout)
+class CheckoutAdmin(admin.ModelAdmin):
+    list_display = ('user', 'total_price', 'grand_total', 'payment_method', 'order_status', 'order_date')
+    list_filter = ('user', 'total_price', 'grand_total', 'payment_method', 'order_status', 'order_date')
+    ordering = ('order_date',)
+    search_fields = ('user__username', 'payment_method', 'order_status')
+
+    inlines = [CheckoutItemInline]
+
+@admin.register(CheckoutItem)
+class CheckoutItemAdmin(admin.ModelAdmin):
+    list_display = ('checkout', 'product', 'quantity', 'item_price')
+    list_filter = ('checkout', 'product', 'quantity', 'item_price')
+    search_fields = ('product__product_name',)
+
+    
