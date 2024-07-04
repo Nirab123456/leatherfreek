@@ -1,4 +1,3 @@
-
 var taxRate = 0.05; // 5% tax rate
 var shippingRate = 15.00; // Fixed shipping rate
 var fadeTime = 300; // Animation time
@@ -19,16 +18,16 @@ function recalculateCart() {
 
   /* Update totals display */
   $('.totals-value').fadeOut(fadeTime, function() {
-    $('#cart-subtotal').text('$' + subtotal.toFixed(2));
-    $('#cart-tax').text('$' + tax.toFixed(2));
-    $('#cart-shipping').text('$' + shipping.toFixed(2));
-    $('#cart-total').text('$' + total.toFixed(2));
+    $('#cart-subtotal').text(subtotal.toFixed(2));
+    $('#cart-tax').text(tax.toFixed(2));
+    $('#cart-shipping').text(shipping.toFixed(2));
+    $('#cart-total').text(total.toFixed(2));
     
     // Show/hide checkout button based on total
     if (total == 0) {
-      $('.checkout').fadeOut(fadeTime);
+      $('.checkout-cta').fadeOut(fadeTime);
     } else {
-      $('.checkout').fadeIn(fadeTime);
+      $('.checkout-cta').fadeIn(fadeTime);
     }
     
     $('.totals-value').fadeIn(fadeTime);
@@ -50,7 +49,9 @@ async function increase_quantity_ajax(product_id){
   } else {
     alert('There was an error increasing the quantity.');
   }
+
   recalculateCart();
+
 }
 
 async function decrease_quantity_ajax(product_id){
@@ -73,28 +74,16 @@ async function decrease_quantity_ajax(product_id){
 
 function updateQuantity_ajax(product_id) {
   const PRODUCT_ID = product_id;
-  // convert prodect id into number
-
   console.log(`Product ID: ${PRODUCT_ID}`);
-  // current value of the input field
   const quantity = document.querySelector(`input[data-product-id="${PRODUCT_ID}"]`).value;
-
   console.log(`Quantity from input field: ${quantity}`);
-
-  // find the hidden div tag
   const hiddenDiv = document.querySelector(`div[data-previous-quantity-product-id="${PRODUCT_ID}"]`);
-
-  // check if hiddenDiv is found
   if (!hiddenDiv) {
     console.error(`No <div> tag found with data-product-id="${PRODUCT_ID}"`);
-    return; // exit the function early
+    return;
   }
-
-  // quantity previously stored in the div tag
   const previous_quantity = hiddenDiv.textContent.trim();
-  // make it a number
   const previous_quantity_number = parseInt(previous_quantity);
-
   console.log(`Previous quantity from <div> tag: ${previous_quantity_number}`);
 
   if (quantity > previous_quantity_number) {
@@ -107,7 +96,6 @@ function updateQuantity_ajax(product_id) {
   update_inline_price(product_id);
 }
 
-/* Remove item from cart */
 async function removeItem(product_id) {
   const csrf = '{{ csrf_token }}';
   const response = await fetch(`/remove_from_cart_ajax/${product_id}/`, {
@@ -120,10 +108,8 @@ async function removeItem(product_id) {
   const data = await response.json();
   if (data.success) {
     alert('Item removed from cart!');
-    // find the product element in the DOM
     const productElement = document.querySelector(`.product[data-product-id="${product_id}"]`);
     if (productElement) {
-      // remove the product element from the DOM
       productElement.remove();
       recalculateCart();
     } else {
@@ -136,10 +122,42 @@ async function removeItem(product_id) {
 
 function update_inline_price(product_id){
   var quantity = document.querySelector(`input[data-product-id="${product_id}"]`).value;
-  var price = document.querySelector(`.product[data-product-id="${product_id}"] .product-price`).textContent;
+  var price = document.querySelector(`.product[data-product-id="${product_id}"] .price`).textContent;
   price = price.replace('$', '');
   var line_price = quantity * price;
   document.querySelector(`.product[data-product-id="${product_id}"] .product-line-price`).textContent = '$' + line_price.toFixed(2);
 }
+  
+async function apply_coupon_code(event) {
+  event.preventDefault(); // Prevent the default form submission
+  const csrf = '{{ csrf_token }}';
+  const coupon_code = document.querySelector('#coupon_code').value;
+  console.log(`Coupon code: ${coupon_code}`);
+
+  try {
+    const response = await fetch(`/apply_coupon_code_ajax/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrf,
+      },
+      body: JSON.stringify({
+        coupon_code: coupon_code,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      alert('Coupon code applied!');
+    } else {
+      alert('There was an error applying the coupon code.');
+    }
+  } catch (error) {
+    console.error('Error applying coupon code:', error);
+    alert('There was an error applying the coupon code.');
+  }
+}
+
+
 
 recalculateCart();

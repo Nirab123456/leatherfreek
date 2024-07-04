@@ -55,8 +55,28 @@
                             <li><a href="#" class="nav-link" data-target="#settings-container"><span class="fa fa-cog"></span> Settings</a></li>
                             <li><a href="#" class="nav-link" data-target="#orders-container"><span class="fa fa-credit-card"></span> Orders</a></li>
                             <li><a href="#" class="nav-link" data-target="#messages-container"><span class="fa fa-envelope"></span> Messages</a></li>
-                            <li><a href="user-drive.html" class="nav-link" data-target="#drive-container"><span class="fa fa-th"></span> Drive</a></li>
-                            <li><a href="#" class="nav-link" data-target="#reminders-container"><span class="fa fa-clock-o"></span> Reminders</a></li>
+
+                            <li>
+                                <a href="#" id="settingsLink" class="nav-link" data-target="#drive-container">
+                                    <span class="svg-icon">
+                                        <img src="{% static 'images/settings.svg' %}" alt="Settings Icon" width="24" height="24">
+                                    </span>
+                                    Settings
+                                </a>
+                            </li>
+                            
+
+                            <li>
+                                <a href="#" class="nav-link" data-target="#reminders-container">
+                                    
+                                    
+                                    <span class="svg-icon">
+                                        <img src="{% static 'images/logout.svg' %}" alt="Logout Icon" width="24" height="24">
+                                    </span>
+                                    
+                                    Logout
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -148,10 +168,12 @@
                     <h2>Messages Content</h2>
                 </div>
                 <div class="content-panel" id="drive-container" style="display: none;">
-                    <h2>Drive Content</h2>
+
+
+
                 </div>
                 <div class="content-panel" id="reminders-container" style="display: none;">
-                    <h2>Reminders Content</h2>
+                    {% include 'account/logout.html' %}
                 </div>
             </div>
         </section>
@@ -167,17 +189,23 @@
 <script src="{% static 'js/custom.js' %}"></script>
 
 <script>
-  $(document).ready(function() {
-    $('.nav-link').on('click', function(e) {
-      e.preventDefault();
-      var target = $(this).data('target');
-      $('.content-panel').hide();
-      $(target).show();
-      $('.nav li').removeClass('active');
-      $(this).closest('li').addClass('active');
+    $(document).ready(function() {
+      $('.nav-link').on('click', function(e) {
+        e.preventDefault();
+        var target = $(this).data('target');
+        $('.content-panel').hide();
+        $(target).show();
+        $('.nav li').removeClass('active');
+        $(this).closest('li').addClass('active');
+  
+        // Check if the clicked link is the settings link
+        if (this.id === 'settingsLink') {
+          $('#drive-container').html('<a href="{% url 'account_email' %}">User Email Link</a>');
+        }
+      });
     });
-  });
-</script>
+  </script>
+  
 </html>
 
 {% endblock content %}
