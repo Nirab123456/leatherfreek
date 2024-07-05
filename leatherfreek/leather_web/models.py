@@ -185,3 +185,4 @@ class CheckoutItem(models.Model):
 
     def __str__(self):
         return f"{self.product.product_name} - {self.quantity}"
+    

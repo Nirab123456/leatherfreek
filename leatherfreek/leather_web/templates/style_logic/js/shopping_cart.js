@@ -173,6 +173,40 @@ async function apply_coupon_code(event) {
   }
 }
 
+
+async function Checkout_cart() {
+  const csrf = '{{ csrf_token }}';
+  const coupon_code = document.querySelector('#promo-code').value;
+  console.log(`Coupon code: ${coupon_code}`);
+  try {
+    const response = await fetch(`/checkout_cart_ajax/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrf,
+      },
+      body: JSON.stringify({
+        coupon_code: coupon_code,
+      }),
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      alert('Checkout successful!');
+      window.location.href = '/checkout/';
+    } else {
+      alert('There was an error checking out: ' + data.error);
+    }
+  } catch (error) {
+    console.error('Error checking out:', error);
+    alert('There was an error checking out.');
+  }
+}
+  
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
   const colorDivs = document.querySelectorAll('.color-viewer');
   colorDivs.forEach(div => {

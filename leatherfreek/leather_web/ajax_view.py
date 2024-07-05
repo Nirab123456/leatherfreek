@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
-from .models import Display_Product, shopping_cart , User_Record , Coupon
+from .models import Display_Product, shopping_cart , User_Record , Coupon , Checkout , CheckoutItem
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -157,6 +157,79 @@ def apply_coupon_code_ajax(request):
             return JsonResponse({'success': False, 'error': 'Invalid JSON'})
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+
+
+def checkout_cart_ajax(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'User not authenticated'})
+
+    cart_items = shopping_cart.objects.filter(user=request.user)
+    if cart_items.count() < 1:
+        return JsonResponse({'success': False, 'error': 'No items in cart'})
+
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        coupon_code = data.get('coupon_code')
+        coupon = Coupon.objects.filter(code=coupon_code).first()
+        
+        subtotal = sum(item.product.product_price * item.quantity for item in cart_items)
+
+        subtotal = float(subtotal)
+
+        print('Subtotal:', subtotal)
+        discount_amount = 0
+
+        if coupon:
+            if coupon.discount_type == 'percentage':
+                discount = coupon.discount_value 
+                #convert discount_amount to float
+                discount_amount = float(discount)
+                discount_amount = (subtotal * discount_amount) / 100
+
+            elif coupon.discount_type == 'fixed':
+                discount_amount = coupon.discount_value
+                discount_amount = float(discount_amount) 
+
+        total_price = subtotal - discount_amount
+        shipping_cost = 10  # Example shipping cost
+        tax_amount = total_price * 0.1  # Example tax amount
+        grand_total = total_price + shipping_cost + tax_amount
+
+
+        print('Discount amount:', discount_amount)
+        print('Grand total:', grand_total)
+        
+
+        checkout = Checkout.objects.create(
+            user=request.user,
+            total_price=subtotal,
+            coupon=coupon if coupon else None,
+            coupon_discount=discount_amount,
+            grand_total=grand_total,
+            payment_method=data.get('payment_method', 'Not specified')
+        )
+
+        for item in cart_items:
+            CheckoutItem.objects.create(
+                checkout=checkout,
+                product=item.product,
+                quantity=item.quantity,
+                item_price=item.product.product_price
+            )
+
+        cart_items.delete()  # Clear the cart after checkout
+
+        return JsonResponse({'success': True, 'checkout_id': checkout.checkout_id, 'grand_total': grand_total})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid data'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})                    
+
+
+
+
 
 
 
