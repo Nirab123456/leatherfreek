@@ -22,10 +22,11 @@ class Display_ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('image_id', 'image')
-    list_filter = ('image_id', 'image')
+    list_display = ('image_id', 'image' , 'image_name')
+    list_filter = ('image_id', 'image' , 'image_name')
     ordering = ('image_id',)
-    search_fields = ('image_id', 'image')
+    search_fields = ('image_id', 'image' , 'image_name')
+
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):

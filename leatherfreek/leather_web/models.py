@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 # Create your models here.
 
@@ -28,13 +29,17 @@ class Volume_Description(models.Model):
     width = models.DecimalField(max_digits=10, decimal_places=2)
     hight = models.DecimalField(max_digits=10, decimal_places=2)
     depth = models.DecimalField(max_digits=10, decimal_places=2)
-    vollume = models.DecimalField(max_digits=10, decimal_places=2)
+    vollume = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('0.00'))
 
-    #return the volume of the product
+    def save(self, *args, **kwargs):
+        # Calculate the volume
+        self.vollume = self.width * self.hight * self.depth
+        super(Volume_Description, self).save(*args, **kwargs)
+
     def __str__(self):
-        str_vol = f"{self.vollume}"
-        return str_vol
-        
+        return f"{self.vollume}"
+    
+
 class Display_Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=100)
@@ -72,9 +77,10 @@ class Home_Product(models.Model):
 class ProductImage(models.Model):
     image_id = models.AutoField(primary_key=True)
     image = models.ImageField(upload_to='product_images/')
+    image_name = models.CharField(max_length=100 , blank=True , null=True)
 
     def __str__(self):
-        return f"{self.image}"
+        return f"{self.image_name}"
 
 
 class Color(models.Model):

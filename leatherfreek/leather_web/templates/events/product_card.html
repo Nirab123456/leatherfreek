@@ -183,9 +183,11 @@
 
               <div class="price_box">
 
-                <h5>Category:</h5>
-                <div class="col-sm-6 row-sm-6" id="catagory-container">
-                  <div class="catagory-list">
+                <div class="row-sm-6" id="catagory-container">
+
+                  <div style="align-items: baseline;" class="catagory-list">
+                    <h5>Category:</h5>
+
                       {% for catagory in product.product_catagory.all %}
                           <div class="catagory-item">
                               <p class="catagory">{{ catagory.catagory_name }}</p>
@@ -198,9 +200,11 @@
               </div>
               <div class="price_box">
 
-                <h5>DESIGN:</h5>
-                <div class="col-sm-6 row-sm-6" id="catagory-container">
-                  <div class="catagory-list">
+                <div class="row-sm-6" id="catagory-container">
+
+                  <div style="align-items: baseline;" class="catagory-list">
+                    <h5>DESIGN:</h5>
+
                     {% for product_design in product.product_design_catagory.all %}
 
                     <div class="catagory-item">
@@ -229,11 +233,11 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td>{{ product.weight_description |default:"No weight description available" }}</td>
-                        <td>{{ volume_description.hight }}</td>
-                            <td>{{ volume_description.width }}</td>
-                            <td>{{ volume_description.depth }}</td>
-                            <td>{{ volume_description.vollume }}</td>
+                        <td>{{ product.weight_description |default:"No weight description available" }} Gram</td>
+                        <td>{{ volume_description.hight }} Cm</td>
+                            <td>{{ volume_description.width }} Cm</td>
+                            <td>{{ volume_description.depth }} Cm</td>
+                            <td>{{ volume_description.vollume }} Cm</td>
                         </tr>
                         <!-- Add more rows as needed -->
                     </tbody>

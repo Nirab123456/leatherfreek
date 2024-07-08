@@ -58,74 +58,82 @@
 
 
   <section  class="furniture_section layout_padding">
+    {% for category, products in category_products.items %}
+
     <div class="container">
       <div class="heading_container">
         <h2>
 
-          {{ catagory.catagory_name }}
+          {{ category.catagory_name}}
 
         </h2>
-        <p>
 
-          {{ catagory.catagory_details }}
-
-        </p>
       </div>
       <div class="row">
 
         {% for product in products %}
-        <div  class="col-md-6 col-lg-4">
-          <a href="{% url 'product_card' product.product_id %}">
-            <div  class="box">
-              <div class="img-box">
-                <img src="{{product.product_image.first.image.url }}" alt="{{ product.product_image.first.image.url }}">
-              </div>
-              <div class="detail-box">
-                <h5>
+        <div style="margin-bottom: 10px;"  class="col-md-6 col-lg-4">
+          <div  class="box">
+            <div class="img-box">
+              <a href="{% url 'product_card' product.product_id %}">
 
-                  {{ product.product_name }}
-
-                </h5>
-
-                <div class="price_box">
-
-                  <h3>Color:</h3>
-                  <div class="color-container" id="color-container">
-                      {% for color in product.product_color.all %}
-
-                          <div class="color-viewer" data-hex="{{ color.hex_code }}" title="{{ color.color_name }}"></div>
-                      {% endfor %}
-                  </div>
-
-                </div>
-
-                <div class="price_box">
-                  <h6 class="price_heading">
-                    <span>$</span>
-                    
-                    
-                    {{ product.product_price }}
-
-
-                  </h6>
-                  <a href="">
-                    Buy Now
-                  </a>
-                </div>
-
-              </div>
+              <img src="{{ product.product_image.first.image.url }}" alt="{{ product.product_image.first.image.url }}">
+              </a>
             </div>
-          </a>
-        </div>
+            <div class="detail-box">
+              <h5>
+
+                {{ product.product_name }}
+
+              </h5>
+
+              <div style="align-items: center;" class="price_box">
+
+                <h3>Color:</h3>
+                <div class="color-container" id="color-container">
+                    {% for color in product.product_color.all %}
+
+                        <div class="color-viewer" data-hex="{{ color.hex_code }}" title="{{ color.color_name }}"></div>
+                    {% endfor %}
+                </div>
+
+              </div>
+
+              <div style="align-items: center;" class="price_box">
+                <h6 class="price_heading">
+                  <span>$</span>
+                  
+                  
+                  {{ product.product_price }}
+
+
+                </h6>
+                  <button class="btn my-2 my-sm-0 nav_cart-btn" type="button" onclick="addToCart({{ product.product_id }})" >
+                    <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
+                  </button>
+                <a href="">
+                  Buy 
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </a>
+      </div>
         {% endfor %}
 
       </div>
     </div>
+    {% endfor %}
   </section>
 
   {% include 'events/footer.html' %}
 
+  <script>
 
+    {% include 'style_logic/js/add_to_cart.js' %}
+
+  </script>
   <!-- jQery -->
   <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
   <!-- bootstrap js -->

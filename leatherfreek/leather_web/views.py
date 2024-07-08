@@ -1,6 +1,7 @@
 from django.shortcuts import render , get_object_or_404 ,redirect
 from .models import Display_Product, Home_Product, Color, Catagory, Design_Catagory , shopping_cart , User_Record
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 # Create your views here.
 
@@ -42,20 +43,7 @@ def product_card(request, product_id):
     print(context)
     return render(request, 'events/product_card.html', context)
 
-def view_products(request, catagory_id):
-    # Retrieve the catagory object using the catagory_id
-    catagory = get_object_or_404(Catagory, pk=catagory_id)
-    
-    # Retrieve all products in the catagory
-    products = Display_Product.objects.filter(product_catagory=catagory)
-    
-    # Example of passing products to the template
-    context = {
-        'catagory': catagory,
-        'products': products,
-    }
-    
-    return render(request, 'events/view_products.html', context)
+
 
 
 
@@ -127,10 +115,24 @@ def update_profile(request):
 
 
 
+def wallet(request):
+    # Find all categories where 'wallet' or 'purse' is present in the name
+    categories = Catagory.objects.filter(Q(catagory_name__icontains='Wallet') | Q(catagory_name__icontains='Purse'))
+
+    # Dictionary to hold products grouped by category
+    category_products = {}
+    for category in categories:
+        products = Display_Product.objects.filter(product_catagory=category)
+        category_products[category] = products  # Use category as key to group products
 
 
 
+    print(category_products)
+    context = {
+        'category_products': category_products,  # Pass the dictionary to the template
+    }
 
+    return render(request, 'events/view_products.html', context)
 
 
 def about_contact(request):
