@@ -1,6 +1,6 @@
 # yourapp/templatetags/home_product_tags.py
 from django import template
-from ..models import Home_Product , Instagram_Post ,contact_us
+from ..models import Home_Product , Instagram_Post ,contact_us , Checkout ,User_Record
 from ..forms import ContactForm
 from ..auto_emails import contact_form_recived_mail
 from django.contrib.auth.models import User
@@ -39,6 +39,17 @@ def handle_contact_form(request):
         
     return  'Send a Text to us'
 
+
+@register.simple_tag(takes_context=True)
+def get_checkout(context):
+    request = context['request']
+    print(request.user)
+    user = request.user
+    user_record = User.objects.filter(username=user).first()
+    print('user record :', user_record)
+    if user_record:
+        return Checkout.objects.filter(user=user_record)
+    return []
 
 
 @register.filter

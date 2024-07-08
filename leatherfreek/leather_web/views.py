@@ -8,16 +8,23 @@ from django.db.models import Q
 def user_profile(request):
     if request.user.is_authenticated:
         user = request.user
-        user_record, created = User_Record.objects.get_or_create(user=user)
-        print('user rewcord',user_record)
-        if user_record:
-            return render(request, 'events/user_profile.html', {'user': user_record})
-        else:        
-            user_record = User.objects.filter(username=user.username).first()
-            return render(request, 'events/user_profile.html', {'user': user_record})
+        user_record = User_Record.objects.filter(user=user).first()
+        
+        if not user_record:
+            first_user_record = User.objects.filter(username=user.username).first()
+            user_record = User_Record(
+                user=first_user_record,
+                user_name=user.username,
+                first_name=first_user_record.first_name,
+                last_name=first_user_record.last_name,
+                user_email=first_user_record.email
+            )
+            user_record.save()
 
+        return render(request, 'events/user_profile.html', {'user': user_record})
     else:
         return redirect('user_login')
+
     
 
 
@@ -25,8 +32,6 @@ def user_profile(request):
 def home(request):
     return render(request, 'events/index.html')
 
-def index_trial(request):
-    return render(request, 'events/index_trial.html')
 
 
 def product_card(request, product_id):

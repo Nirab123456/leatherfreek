@@ -53,7 +53,7 @@
       
       </div>
       {% else %}
-      <div class="quote_btn-container" id="login-content" style="display: none;">
+      <div class="quote_btn-container" id="login-content">
         <a href="{% url 'user_login' %}">
           <span>Login</span>
           <i class="fa fa-user" aria-hidden="true"></i>
@@ -66,58 +66,11 @@
 
       </div>
 
-      <div class="quote_btn-container" id="signup-content" style="display: none;">
-        <a href="{% url 'user_signup' %}">
-          <span>Sign Up</span>
-          <i class="fa fa-user" aria-hidden="true"></i>
-        </a>
-        <a href="{% url 'shopping_cart' %}">
-          <button class="btn my-2 my-sm-0 nav_cart-btn" type="button">
-            <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
-          </button>
-        </a>
-      </div>
-
-      <div class="quote_btn-container" id="signup_login-content" style="display: none;">
-        <a href="{% url 'user_signup' %}">
-          <span>Login / Signup</span>
-          <i class="fa fa-user" aria-hidden="true"></i>
-        </a>
-        <a href="{% url 'shopping_cart' %}">
-          <button class="btn my-2 my-sm-0 nav_cart-btn" type="button">
-            <img src="{% static 'images/shopping_cart.ico' %}" alt="Cart Icon" class="cart-icon">
-          </button>
-        </a>
-      </div>
       {% endif %}
     </div>
   </nav>
 </header>
 <!-- end header section -->
 
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const url = window.location.href;
-    const loginContent = document.getElementById("login-content");
-    const signupContent = document.getElementById("signup-content");
-    const signupLoginContent = document.getElementById("signup_login-content");
-
-    if (!{{ user.is_authenticated|yesno:"true,false" }}) {
-      if (url.includes("/accounts/signup/")) {
-        signupContent.style.display = "none";
-        loginContent.style.display = "block";
-        signupLoginContent.style.display = "none";
-      } else if (url.includes("/accounts/login/")) {
-        loginContent.style.display = "none";
-        signupContent.style.display = "block";
-        signupLoginContent.style.display = "none";
-      } else {
-        loginContent.style.display = "none";
-        signupContent.style.display = "none";
-        signupLoginContent.style.display = "block";
-      }
-    }
-  });
-</script>
 
 {% endblock %}
