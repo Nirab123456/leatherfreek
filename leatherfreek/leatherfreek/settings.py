@@ -1,28 +1,24 @@
-
 from pathlib import Path
 import os
-import requests
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=a-ajz-l+1hk^5^31lg(9l^_+n1t&hluc473ikk@*d)ov-3mqa'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['leatherfreek.ca', 'localhost', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = ['https://leatherfreek.ca', 'http://leatherfreek.ca', 'https://localhost', 'http://localhost']
-CORS_ALLOWED_ORIGINS = ['https://leatherfreek.ca', 'http://leatherfreek.ca', 'https://localhost', 'http://localhost']
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=Csv())
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -31,8 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'leather_web',
-    
-
 
     'allauth',
     'allauth.account',
@@ -40,8 +34,6 @@ INSTALLED_APPS = [
     # Optional -- requires install using `django-allauth[socialaccount]`.
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-
 ]
 
 MIDDLEWARE = [
@@ -78,10 +70,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'leatherfreek.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -89,10 +79,8 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -108,10 +96,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -120,13 +106,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-
-# settings.py
-
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 
 # The directory where static files should be collected
@@ -135,13 +116,12 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Directories where Django will also look for static files
 STATICFILES_DIRS = [
     BASE_DIR / "static",
- ]
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# settings.py
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -153,21 +133,18 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.zohocloud.ca'
-EMAIL_PORT = 587  # Use 587 for TLS
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'security.auth@leatherfreek.ca'
-EMAIL_HOST_PASSWORD = 'RImajumder@123'
-
-DEFAULT_FROM_EMAIL = 'security.auth@leatherfreek.ca'
-SERVER_EMAIL = 'security.auth@leatherfreek.ca'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = config('SERVER_EMAIL')
 
 ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -178,8 +155,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         },
-        'OAUTH2_CLIENT_ID': '887556623145-5gnij0j9suo9558jcdt6do15ac0sao8b.apps.googleusercontent.com',
-        'OAUTH2_CLIENT_SECRET': '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',
-        'REDIRECT_URI': 'http://localhost:8000/accounts/google/login/callback/'
+        'OAUTH2_CLIENT_ID': config('OAUTH2_CLIENT_ID'),
+        'OAUTH2_CLIENT_SECRET': config('OAUTH2_CLIENT_SECRET'),
+        'REDIRECT_URI': config('AUTH_REDIRECT_URI'),
     }
 }

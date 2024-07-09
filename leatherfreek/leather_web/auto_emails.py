@@ -2,51 +2,18 @@ from django.core.mail import send_mail , get_connection
 from django.template.loader import render_to_string
 from django.conf import settings
 from django.core.exceptions import ValidationError
-
-# def contact_form_recived_mail(email, name, message):
-#     try:
-#         # Send notification email to admin
-#         send_mail(
-#             subject=f'New contact form submission from {name}',
-#             message=message,
-#             from_email=settings.DEFAULT_FROM_EMAIL,
-#             recipient_list=[settings.SERVER_EMAIL],
-#         )
-
-#         # Send automatic reply email to user
-#         context = {'name': name}
-#         subject = 'Thank you for contacting us'
-#         message = render_to_string('auto_emails/about_contact_auto_email.html', context)
-#         send_mail(
-#             subject=subject,
-#             message=message,
-#             from_email=settings.DEFAULT_FROM_EMAIL,
-#             recipient_list=[email],
-#             html_message=message,
-#         )
-
-#     except ValidationError as e:
-#         # Handle validation errors (if any)
-#         print(f"Validation error occurred: {e}")
-
-#     except Exception as e:
-#         # Handle other exceptions (e.g., SMTP errors)
-#         print(f"An error occurred: {e}")
-
-#     else:
-#         # Optionally, log success or perform additional actions
-#         print("Emails sent successfully.")
+from decouple import config
 
 
 def contact_form_recived_mail(email, name, message):
     try:
-        my_host = 'smtp.zohocloud.ca'
-        my_port = 587
-        my_username = 'support@leatherfreek.ca'
-        my_password = 'RImajumder@123'
+        my_host = config('EMAIL_HOST')
+        my_port = config('EMAIL_PORT', cast=int)
+        my_username = config('SUPPORT_EMAIL')
+        my_password = config('EMAIL_HOST_PASSWORD')
         my_use_tls = True
         my_use_ssl = False
-        my_from_email = 'support@leatherfreek.ca'
+        my_from_email = config('SUPPORT_EMAIL')
         my_recipient_list = [email]
         my_subject = f'New contact form submission from {name}'
         my_message = message
