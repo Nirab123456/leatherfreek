@@ -1,11 +1,19 @@
-from django.http import JsonResponse
+import os
+from django.http import JsonResponse ,HttpResponse
 from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404 , render , redirect
 from .models import Display_Product, shopping_cart , User_Record , Coupon , Checkout , CheckoutItem
 import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.template.loader import render_to_string
+import io
+from django.core.mail import send_mail , get_connection , EmailMessage
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from decouple import config
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 
 def add_to_cart_ajax(request, product_id):
@@ -219,20 +227,129 @@ def checkout_cart_ajax(request):
             )
 
         cart_items.delete()  # Clear the cart after checkout
+        # Send the invoice email
+        send_invoice_mail(request, checkout, subtotal, discount_amount, shipping_cost, tax_amount, grand_total)
+        print('cart sent')
 
         return JsonResponse({'success': True, 'checkout_id': checkout.checkout_id, 'grand_total': grand_total})
 
     except json.JSONDecodeError:
         return JsonResponse({'success': False, 'error': 'Invalid data'})
     except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)})                    
+        return JsonResponse({'success': False, 'error': str(e)})
+    
+    
+def link_callback(uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        result = finders.find(uri)
+        if result:
+                if not isinstance(result, (list, tuple)):
+                        result = [result]
+                result = list(os.path.realpath(path) for path in result)
+                path=result[0]
+        else:
+                sUrl = settings.STATIC_URL        # Typically /static/
+                sRoot = settings.STATIC_ROOT      # Typically /home/userX/project_static/
+                mUrl = settings.MEDIA_URL         # Typically /media/
+                mRoot = settings.MEDIA_ROOT       # Typically /home/userX/project_static/media/
+
+                if uri.startswith(mUrl):
+                        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+                elif uri.startswith(sUrl):
+                        path = os.path.join(sRoot, uri.replace(sUrl, ""))
+                else:
+                        return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+                raise RuntimeError(
+                        'media URI must start with %s or %s' % (sUrl, mUrl)
+                )
+        return path
 
 
 
+def convert_html_to_pdf(source_html):
+    """
+    Convert HTML to PDF using xhtml2pdf
+    """
+    buffer = io.BytesIO()
+    pisa_status = pisa.CreatePDF(
+        source_html, dest=buffer, link_callback=link_callback)
+
+    if pisa_status.err:
+        return None
+    buffer.seek(0)
+    return buffer
 
 
+def send_invoice_mail(request, checkout, subtotal, discount_amount, shipping_cost, tax_amount, grand_total):
+    try:
+        # Render HTML template to string
+        cart_items = CheckoutItem.objects.filter(checkout=checkout)
+        html_content = render_to_string('account/email/invoice.html', {
+            'user': request.user,
+            'checkout': checkout,
+            'cart_items': cart_items,
+            'subtotal': subtotal,
+            'discount_amount': discount_amount,
+            'shipping_cost': shipping_cost,
+            'tax_amount': tax_amount,
+            'grand_total': grand_total
+        })
 
 
+        # Convert HTML to PDF using xhtml2pdf
+        pdf_buffer = convert_html_to_pdf(html_content)
+        print('pdf_buffer:', pdf_buffer)
+
+        if pdf_buffer is None:
+            return HttpResponse('Error generating PDF', status=500)
+
+        # Email configuration
+        my_host = config('EMAIL_HOST')
+        my_port = config('EMAIL_PORT', cast=int)
+        my_username = config('SUPPORT_EMAIL')
+        my_password = config('EMAIL_HOST_PASSWORD')
+        my_use_tls = True
+        my_use_ssl = False
+        my_from_email = config('SUPPORT_EMAIL')
+        my_recipient_list = [request.user.email]
+        my_subject = 'Your Purchase Receipt'
+        my_message = 'Thank you for your purchase. Please find the attached receipt.'
+        my_html_message = render_to_string('auto_emails/about_contact_auto_email.html')
+        my_fail_silently = False
+
+        my_connection = get_connection(
+            host=my_host,
+            port=my_port,
+            username=my_username,
+            password=my_password,
+            use_tls=my_use_tls,
+            use_ssl=my_use_ssl,
+        )
+
+        # Send email with PDF attachment
+        email = EmailMessage(
+            subject=my_subject,
+            body=my_message,
+            from_email=my_from_email,
+            to=my_recipient_list,
+            connection=my_connection,
+        )
+        email.attach('receipt.pdf', pdf_buffer.getvalue(), 'application/pdf')
+        email.send()
+
+        # Optionally, return an HttpResponse or any other response indicating success
+        return HttpResponse('Invoice sent successfully.')
+
+    except Exception as e:
+        # Handle exceptions appropriately
+        print(f"An error occurred while sending the invoice email: {e}")
+        return HttpResponse('Failed to send invoice.')
 
 
 def update_profile_ajax(request):
